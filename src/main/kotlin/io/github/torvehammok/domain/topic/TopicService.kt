@@ -13,7 +13,7 @@ class TopicService(private val topicOps: TopicOps) {
 
         val summary = TopicDiffPrinter().printDiffs(plan)
 
-        log.info("Executing topics changes plan:\n{}", summary)
+        log.info("Executing topics changes plan:\n\n{}", summary)
 
         topicOps.executeTopicUpdatePlan(plan)
     }

@@ -2,8 +2,10 @@ package io.github.torvehammok.domain
 
 import io.github.torvehammok.OrdoEventiTest
 import io.github.torvehammok.domain.schema.RegistryClient
+import io.github.torvehammok.domain.schema.RegistrySchemaRef
 import io.github.torvehammok.domain.schema.SchemaService
 import io.github.torvehammok.domain.schema.SchemaUpdatePlanPrinter
+import io.github.torvehammok.domain.schema.NamespaceSchemas
 import io.github.torvehammok.infra.config.YamlFileConfigmap
 import io.github.torvehammok.infra.ctx.DefaultCtx
 import org.assertj.core.api.Assertions.assertThat
@@ -37,6 +39,98 @@ class TicTacToeTest : OrdoEventiTest() {
     }
 
     @Test
+    fun testPrintSchemasForGamingNamespace() {
+        val deps = schemaService.listSchemasNamespaces(namespace = "io.github.torvehammok.ordoeventi.proto")
+
+        assertThat(deps).containsExactly(
+            NamespaceSchemas(
+                namespace = "io.github.torvehammok.ordoeventi.proto",
+                schemas = listOf(
+                    NamespaceSchemas.Item("purchases/PurchaseStatus.proto"),
+                    NamespaceSchemas.Item(
+                        name = "purchases/Offer.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep(
+                                name = "common/Money.proto",
+                                namespace = "io.github.torvehammok.proto.common"
+                            ),
+                            NamespaceSchemas.Dep("purchases/PurchaseStatus.proto")
+                        )
+                    ),
+                    NamespaceSchemas.Item("purchases/Product.proto"),
+                    NamespaceSchemas.Item(
+                        name = "purchases/private.payment-intent-created-value.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep(
+                                name = "common/Address.proto",
+                                namespace = "io.github.torvehammok.proto.common"
+                            ),
+                            NamespaceSchemas.Dep(
+                                name = "common/Money.proto",
+                                namespace = "io.github.torvehammok.proto.common"
+                            ),
+                            NamespaceSchemas.Dep("purchases/Offer.proto"),
+                            NamespaceSchemas.Dep("purchases/Product.proto")
+                        )
+                    ),
+                    NamespaceSchemas.Item("purchases/PaymentStatus.proto"),
+                    NamespaceSchemas.Item(
+                        name = "purchases/Payment.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep("purchases/PaymentStatus.proto")
+                        )
+                    ),
+                    NamespaceSchemas.Item(
+                        name = "purchases/Purchase.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep(
+                                name = "common/Address.proto",
+                                namespace = "io.github.torvehammok.proto.common"
+                            ),
+                            NamespaceSchemas.Dep(
+                                name = "common/Money.proto",
+                                namespace = "io.github.torvehammok.proto.common"
+                            ),
+                            NamespaceSchemas.Dep("purchases/Offer.proto"),
+                            NamespaceSchemas.Dep("purchases/Payment.proto"),
+                            NamespaceSchemas.Dep("purchases/Product.proto")
+                        )
+                    ),
+                    NamespaceSchemas.Item(
+                        name = "purchases/private.topic-1-value.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep("purchases/Purchase.proto")
+                        )
+                    ),
+                    NamespaceSchemas.Item("purchases/CustomerStatus.proto"),
+                    NamespaceSchemas.Item(
+                        name = "purchases/CustomerUpdateProto.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep(
+                                name = "common/Address.proto",
+                                namespace = "io.github.torvehammok.proto.common"
+                            ),
+                            NamespaceSchemas.Dep(
+                                name = "common/Money.proto",
+                                namespace = "io.github.torvehammok.proto.common"
+                            ),
+                            NamespaceSchemas.Dep("purchases/CustomerStatus.proto")
+                        )
+                    ),
+                    NamespaceSchemas.Item(
+                        name = "purchases/private.topic-2-value.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep("purchases/CustomerUpdateProto.proto"),
+                        )
+                    ),
+                    NamespaceSchemas.Item(name="purchases/CustomerDeleteProto.proto"),
+                    NamespaceSchemas.Item(name="purchases/BooFoo.proto"),
+                )
+            )
+        )
+    }
+
+    @Test
     fun testUpdateSchemasWithDeps() {
         // given:
         registryClient.updateSchema(
@@ -65,12 +159,19 @@ class TicTacToeTest : OrdoEventiTest() {
                 option java_multiple_files = true;
                 
                 import "common/Money.proto";
-                import "gaming-common/Player.proto";
                 
                 message BetProto {
                   string id = 1;
                 }
             """.trimIndent(),
+            refs = listOf(
+                RegistrySchemaRef(
+                    subject = "common/Money.proto",
+                    file = "common/Money.proto",
+                    version = -1,
+                    name = "common/Money.proto"
+                )
+            )
         )
 
         // when:
@@ -151,131 +252,24 @@ class TicTacToeTest : OrdoEventiTest() {
     }
 
     @Test
-    fun testPrintSchemasTree() {
-        val deps = schemaService.findSchemasGraph()
+    fun testPrintSchemasTreeForCommonNamespace() {
+        val deps = schemaService.listSchemasNamespaces(namespace = "io.github.torvehammok.proto.common")
 
-        val dependencyGraph = deps.dependencyGraph()
-
-        assertThat(dependencyGraph).isEqualToIgnoringWhitespace(
-            """
-            ---
-            namespace: io.github.torvehammok.proto.common
-            schemas:
-              - name: common/Money.proto
-              - name: common/BookingAmounts.proto
-                deps:
-                  - name: common/Money.proto
-              - name: common/DateRange.proto
-              - name: common/Address.proto
-            ---
-            namespace: io.github.torvehammok.proto.gaming
-            schemas:
-              - name: gaming-common/Player.proto
-              - name: gaming-common/Bet.proto
-                deps:
-                  - name: common/Money.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: gaming-common/Player.proto
-            ---
-            namespace: io.github.torvehammok.ordoeventi.proto
-            schemas:
-              - name: purchases/PurchaseStatus.proto
-              - name: purchases/Offer.proto
-                deps:
-                  - name: common/Money.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: purchases/PurchaseStatus.proto
-              - name: purchases/Product.proto
-              - name: purchases/private.payment-intent-created-value.proto
-                deps:
-                  - name: common/Address.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: common/Money.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: purchases/Offer.proto
-                  - name: purchases/Product.proto
-              - name: purchases/PaymentStatus.proto
-              - name: purchases/Payment.proto
-                deps:
-                  - name: purchases/PaymentStatus.proto
-              - name: purchases/Purchase.proto
-                deps:
-                  - name: common/Address.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: common/Money.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: purchases/Offer.proto
-                  - name: purchases/Payment.proto
-                  - name: purchases/Product.proto
-              - name: purchases/private.topic-1-value.proto
-                deps:
-                  - name: purchases/Purchase.proto
-              - name: purchases/CustomerStatus.proto
-              - name: purchases/CustomerUpdateProto.proto
-                deps:
-                  - name: common/Address.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: common/Money.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: purchases/CustomerStatus.proto
-              - name: purchases/private.topic-2-value.proto
-                deps:
-                  - name: purchases/CustomerUpdateProto.proto
-              - name: purchases/CustomerDeleteProto.proto
-              - name: purchases/BooFoo.proto
-            ---
-            namespace: io.github.torvehammok.proto.tictactoe
-            schemas:
-              - name: tictactoe/PlayerRole.proto
-              - name: tictactoe/tictactoe.player-joined-value.proto
-                deps:
-                  - name: gaming-common/Player.proto
-                    namespace: io.github.torvehammok.proto.gaming
-                  - name: tictactoe/PlayerRole.proto
-              - name: tictactoe/GetGameStateQuery.proto
-              - name: tictactoe/GetGameHistoryQuery.proto
-              - name: tictactoe/GameStatus.proto
-              - name: tictactoe/TicTacToeGameState.proto
-                deps:
-                  - name: gaming-common/Bet.proto
-                    namespace: io.github.torvehammok.proto.gaming
-                  - name: gaming-common/Player.proto
-                    namespace: io.github.torvehammok.proto.gaming
-                  - name: tictactoe/GameStatus.proto
-              - name: tictactoe/GameHistoryResponse.proto
-                deps:
-                  - name: tictactoe/TicTacToeGameState.proto
-                  - name: tictactoe/TicTacToeMove.proto
-              - name: tictactoe/tictactoe.move-made-value.proto
-                deps:
-                  - name: tictactoe/TicTacToeGameState.proto
-                  - name: tictactoe/TicTacToeMove.proto
-              - name: tictactoe/GameStateResponse.proto
-                deps:
-                  - name: tictactoe/TicTacToeGameState.proto
-              - name: tictactoe/tictactoe.game-snapshot-value.proto
-                deps:
-                  - name: tictactoe/TicTacToeGameState.proto
-              - name: tictactoe/GamesListResponse.proto
-                deps:
-                  - name: tictactoe/TicTacToeGameState.proto
-              - name: tictactoe/GameFilter.proto
-              - name: tictactoe/GetPlayerGamesQuery.proto
-                deps:
-                  - name: gaming-common/Player.proto
-                    namespace: io.github.torvehammok.proto.gaming
-                  - name: tictactoe/GameFilter.proto
-              - name: tictactoe/GameEndReason.proto
-              - name: tictactoe/tictactoe.game-finished-value.proto
-                deps:
-                  - name: common/Money.proto
-                    namespace: io.github.torvehammok.proto.common
-                  - name: gaming-common/Player.proto
-                    namespace: io.github.torvehammok.proto.gaming
-                  - name: tictactoe/GameEndReason.proto
-              - name: tictactoe/GameCommandResponse.proto
-
-            """.trimIndent()
+        assertThat(deps).containsExactly(
+            NamespaceSchemas(
+                namespace = "io.github.torvehammok.proto.common",
+                schemas = listOf(
+                    NamespaceSchemas.Item("common/Money.proto"),
+                    NamespaceSchemas.Item(
+                        name = "common/BookingAmounts.proto",
+                        deps = listOf(
+                            NamespaceSchemas.Dep("common/Money.proto")
+                        )
+                    ),
+                    NamespaceSchemas.Item("common/DateRange.proto"),
+                    NamespaceSchemas.Item("common/Address.proto")
+                )
+            )
         )
     }
 }

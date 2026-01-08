@@ -96,6 +96,14 @@ tasks.register<JavaExec>("schemas-plan") {
     args = listOf("schemas-plan", "-c", "src/main/resources/configmap.yaml")
 }
 
+tasks.register<JavaExec>("bootstrap-all") {
+    group = "ordo-eventi"
+    description = "Run the Kotlin application"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("io.github.torvehammok.OrdoEventiApplicationKt")
+    args = listOf("run-all", "topics-apply", "schemas-apply", "-c", "src/main/resources/configmap.yaml")
+}
+
 tasks.register<JavaExec>("schemas-apply") {
     group = "ordo-eventi"
     description = "Run the Kotlin application"
@@ -109,7 +117,8 @@ tasks.register<JavaExec>("schemas-tree") {
     description = "Run the Kotlin application"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("io.github.torvehammok.OrdoEventiApplicationKt")
-    args = listOf("schemas-tree", "-n", "io.github.torvehammok.proto.tictactoe", "-c", "src/main/resources/configmap.yaml")
+    args =
+        listOf("schemas-tree", "-n", "io.github.torvehammok.proto.tictactoe", "-c", "src/main/resources/configmap.yaml")
 }
 
 tasks.register<JavaExec>("schemas-destroy") {

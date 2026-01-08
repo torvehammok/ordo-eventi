@@ -2,7 +2,7 @@ package io.github.torvehammok.domain.schema
 
 interface SchemasGraph {
 
-    fun dependencyGraph(namespace: String? = null): String
+    fun listNamespaces(namespace: String? = null): List<NamespaceSchemas>
 
     fun dependencyGraphItems(): List<SchemaDef>
 
@@ -15,3 +15,11 @@ interface SchemasGraph {
 }
 
 data class SchemaDef(val subject: String, val filename: String, val packageName: String)
+
+data class NamespaceSchemas(val namespace: String, val schemas: List<Item>) {
+
+    data class Item(val name: String, val deps: List<Dep> = emptyList())
+
+    data class Dep(val name: String, val namespace: String? = null)
+
+}
