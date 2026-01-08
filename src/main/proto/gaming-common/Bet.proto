@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.gaming;
+
+option java_multiple_files = true;
+
+import "common/Money.proto";
+import "gaming-common/Player.proto";
+
+message BetProto {
+
+  string id = 1;
+
+  io.github.torvehammok.proto.gaming.PlayerProto player1 = 2;
+  io.github.torvehammok.proto.gaming.PlayerProto player2 = 3;
+  io.github.torvehammok.proto.common.MoneyProto stake = 4;
+
+}

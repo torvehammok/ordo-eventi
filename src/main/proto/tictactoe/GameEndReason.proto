@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+// Reason why the game ended
+enum GameEndReason {
+  GAME_END_REASON_UNSPECIFIED = 0;
+  GAME_END_REASON_WIN = 1;
+  GAME_END_REASON_DRAW = 2;
+  GAME_END_REASON_FORFEIT = 3;
+  GAME_END_REASON_TIMEOUT = 4;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+import "common/Money.proto";
+import "common/Address.proto";
+import "purchases/CustomerStatus.proto";
+
+import "google/protobuf/timestamp.proto";
+
+message CustomerUpdateProto {
+  string customer_id = 1;
+  string name = 2;
+  string email = 3;
+  string phone_number = 4;
+  CustomerStatusProto status = 5;
+  io.github.torvehammok.proto.common.MoneyProto balance = 6;
+  io.github.torvehammok.proto.common.AddressProto address = 7;
+
+  oneof audit_info {
+    google.protobuf.Timestamp updated_at = 8;
+    google.protobuf.Timestamp created_at = 9;
+  }
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+// Player role in the game
+enum PlayerRole {
+  PLAYER_ROLE_UNSPECIFIED = 0;
+  PLAYER_ROLE_X = 1;
+  PLAYER_ROLE_O = 2;
+  PLAYER_ROLE_SPECTATOR = 3;
+}

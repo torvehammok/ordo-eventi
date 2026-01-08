@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "common/Money.proto";
+
+// Query to get available games to join
+message GetAvailableGamesQuery {
+  bool include_private = 1; // Whether to include private games
+  optional io.github.torvehammok.proto.common.MoneyProto max_stake = 2; // Maximum stake filter
+  int32 limit = 3;
+  int32 offset = 4;
+}

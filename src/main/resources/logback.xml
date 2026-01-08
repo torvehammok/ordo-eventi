@@ -1,0 +1,15 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger -- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+    <logger name="io.github.torvehammok" level="debug"/>
+
+    <logger name="org.apache.kafka.common.config" level="warn"/>
+    <logger name="org.apache.kafka.clients.admin" level="warn"/>
+</configuration>

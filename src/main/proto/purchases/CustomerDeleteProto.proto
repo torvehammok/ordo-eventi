@@ -1,0 +1,11 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+import "google/protobuf/duration.proto";
+
+option java_multiple_files = true;
+
+message CustomerDeleteProto {
+  string customer_id = 1;
+  google.protobuf.Duration deleted_at = 2;
+}

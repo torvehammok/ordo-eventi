@@ -1,0 +1,19 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+import "purchases/PaymentStatus.proto";
+
+message PaymentProto {
+  string externalId = 1;
+
+  io.github.torvehammok.ordoeventi.proto.PaymentStatusProto status = 2;
+
+  string externalCustomerId = 3;
+  string method = 4;
+  string wallet = 5;
+  double amount = 6;
+  string currency = 7;
+  string createdAt = 8;
+}

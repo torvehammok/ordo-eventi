@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+import "common/Money.proto";
+
+// Event when a new game is created
+message GameCreated {
+  string game_id = 1;
+  io.github.torvehammok.proto.gaming.PlayerProto creator = 2;
+  int64 timestamp = 3;
+  optional io.github.torvehammok.proto.common.MoneyProto stake = 4; // Optional stake for betting games
+}

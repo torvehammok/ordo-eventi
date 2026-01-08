@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+
+// Event when a player abandons the game
+message GameAbandoned {
+  string game_id = 1;
+  io.github.torvehammok.proto.gaming.PlayerProto abandoning_player = 2;
+  int64 timestamp = 3;
+}

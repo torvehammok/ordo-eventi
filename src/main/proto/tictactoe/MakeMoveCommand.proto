@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+import "google/protobuf/timestamp.proto";
+
+// Command to make a move
+message MakeMoveCommand {
+  string game_id = 1;
+  io.github.torvehammok.proto.gaming.PlayerProto player = 2;
+  int32 row = 3;
+  int32 column = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}

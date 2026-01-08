@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+import "common/Money.proto";
+import "tictactoe/GameEndReason.proto";
+
+// Event when a game ends
+message GameFinished {
+  string game_id = 1;
+  io.github.torvehammok.proto.gaming.PlayerProto winner = 2; // null for draw
+  GameEndReason reason = 3;
+  repeated int32 winning_positions = 4;
+  int64 timestamp = 5;
+  optional io.github.torvehammok.proto.common.MoneyProto prize = 6; // Prize money if it was a betting game
+}

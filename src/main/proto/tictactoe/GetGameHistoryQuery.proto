@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+// Query to get game history/moves
+message GetGameHistoryQuery {
+  string game_id = 1;
+}

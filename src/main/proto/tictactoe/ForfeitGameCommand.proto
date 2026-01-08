@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+
+// Command to forfeit a game
+message ForfeitGameCommand {
+  string game_id = 1;
+  io.github.torvehammok.proto.gaming.PlayerProto player = 2;
+  string reason = 3; // Optional reason for forfeiting
+}

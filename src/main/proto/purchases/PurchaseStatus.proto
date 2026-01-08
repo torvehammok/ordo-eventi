@@ -1,0 +1,13 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+enum PurchaseStatusProto {
+  PURCHASE_STATUS_UNSPECIFIED = 0;
+  PURCHASE_STATUS_ACTIVE = 1;
+  PURCHASE_STATUS_COMPLETED = 2;
+  PURCHASE_STATUS_CANCELLED = 3;
+  PURCHASE_STATUS_REFUNDED = 4;
+  PURCHASE_STATUS_AML = 5;
+}

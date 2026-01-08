@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+import "tictactoe/GameFilter.proto";
+
+// Query to get all games for a player
+message GetPlayerGamesQuery {
+  io.github.torvehammok.proto.gaming.PlayerProto player = 1;
+  GameFilter filter = 2; // Optional filter
+  int32 limit = 3; // Max number of games to return
+  int32 offset = 4; // Pagination offset
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+enum PaymentStatusProto {
+  PAYMENT_STATUS_UNSPECIFIED = 0;
+  PAYMENT_STATUS_PENDING = 1;
+  PAYMENT_STATUS_COMPLETED = 2;
+  PAYMENT_STATUS_REFUNDED = 3;
+  PAYMENT_STATUS_FAILED = 4;
+}

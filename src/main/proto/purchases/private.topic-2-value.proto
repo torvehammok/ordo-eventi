@@ -1,0 +1,12 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+import "purchases/CustomerUpdateProto.proto";
+
+message CustomerUpdateMessageProto {
+  oneof message {
+    io.github.torvehammok.ordoeventi.proto.CustomerUpdateProto msg = 1;
+  }
+}

@@ -1,0 +1,104 @@
+$schema: 'http://json-schema.org/draft-07/schema#'
+type: object
+required:
+  - 'kafkaAdmin'
+  - 'schemaRegistry'
+  - 'schemaSpecs'
+  - 'topicSpecs'
+properties:
+  kafkaAdmin:
+    type: object
+    properties:
+      config:
+        type: object
+        additionalProperties:
+          type: string
+    required: [ 'config' ]
+  sandbox:
+    type: object
+    description: "Sandbox mode configuration. It allows prefixing topics and schemas to create an isolated environment."
+    properties:
+      enabled:
+        description: "Flag to enable or disable sandbox mode"
+        type: boolean
+        default: false
+      prefix:
+        description: "Prefix to apply to all topic names in sandbox mode"
+        type: string
+    required: [ 'enabled', 'prefix' ]
+  schemaSpecs:
+    type: object
+    properties:
+      dir:
+        description: "Directory containing schema files"
+        type: string
+      includeOnly:
+        type: array
+        description: "List of glob patterns to include only specific schema files. Empty or omitted means include all."
+        items:
+          type: object
+          properties:
+            glob:
+              description: "Glob pattern to include schema files"
+              type: string
+          required: [ 'glob' ]
+      defaults:
+        type: object
+        default: "BACKWARD"
+        properties:
+          compatibility:
+            description: Default compatibility level for schemas.
+            type: string
+            enum: [ 'BACKWARD', 'FORWARD', 'FULL', 'NONE', "FULL_TRANSITIVE" ]
+  schemaRegistry:
+    type: object
+    properties:
+      baseUrl:
+        description: "Base URL for the schema registry"
+        type: string
+      config:
+        type: object
+        description: "Additional schema registry properties"
+        additionalProperties:
+          type: string
+    required: [ 'baseUrl' ]
+
+  topicSpecs:
+    type: object
+    properties:
+      topicDefaults:
+        type: object
+        properties:
+          partitions:
+            description: "Default number of partitions for topics"
+            type: integer
+            minimum: 1
+          config:
+            type: object
+            additionalProperties:
+              description: "Default kafka topic configuration values"
+              type: [ string, integer, boolean ]
+        required: [ 'partitions', 'config' ]
+      topics:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              default: "Kafka topic name"
+              type: string
+            partitions:
+              description: "Number of partitions for the topic"
+              type: integer
+              minimum: 1
+            deleteTopic:
+              description: "Flag to indicate if the topic should be deleted"
+              type: boolean
+              default: false
+            configOverrides:
+              type: object
+              description: "Topic specific configuration overrides"
+              additionalProperties:
+                type: [ string, integer, boolean ]
+          required: [ 'name' ]
+    required: [ 'topicDefaults', 'topics' ]

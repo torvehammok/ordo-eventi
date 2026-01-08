@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "tictactoe/TicTacToeMove.proto";
+import "tictactoe/TicTacToeGameState.proto";
+
+// Response containing game move history
+message GameHistoryResponse {
+  string game_id = 1;
+  repeated io.github.torvehammok.proto.tictactoe.TicTacToeMove moves = 2;
+  io.github.torvehammok.proto.tictactoe.TicTacToeGameState final_state = 3;
+}

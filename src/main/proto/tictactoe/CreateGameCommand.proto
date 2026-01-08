@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+import "common/Money.proto";
+
+// Command to create a new tic-tac-toe game
+message CreateGameCommand {
+  io.github.torvehammok.proto.gaming.PlayerProto creator = 1;
+  optional io.github.torvehammok.proto.common.MoneyProto stake = 2; // Optional stake for betting
+  bool private_game = 3; // Whether the game is private (invite-only)
+  optional string invitation_code = 4; // Code for private games
+}

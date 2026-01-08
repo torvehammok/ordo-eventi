@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "tictactoe/TicTacToeGameState.proto";
+
+// Response containing multiple games
+message GamesListResponse {
+  repeated io.github.torvehammok.proto.tictactoe.TicTacToeGameState games = 1;
+  int32 total_count = 2; // Total number of games matching the query
+  bool has_more = 3; // Whether there are more results available
+}

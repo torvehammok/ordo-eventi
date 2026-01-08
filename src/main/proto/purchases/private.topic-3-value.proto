@@ -1,0 +1,11 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+import "common/Money.proto";
+
+message CustomerBalanceChangedProto {
+  io.github.torvehammok.proto.common.MoneyProto next_balance = 2;
+  string customer_id = 1;
+}

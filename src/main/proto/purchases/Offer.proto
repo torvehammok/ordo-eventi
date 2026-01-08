@@ -1,0 +1,15 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+import "common/Money.proto";
+import "purchases/PurchaseStatus.proto";
+
+message OfferProto {
+  string code = 1;
+  string description = 2;
+  io.github.torvehammok.proto.common.MoneyProto price = 3;
+  string productCode = 4;
+  io.github.torvehammok.ordoeventi.proto.PurchaseStatusProto status = 5;
+}

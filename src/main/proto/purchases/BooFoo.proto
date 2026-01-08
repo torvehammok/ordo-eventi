@@ -1,0 +1,10 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+message BooFooProto {
+  string boo = 1;
+  int32 foo = 2;
+  int64 baz = 3;
+}

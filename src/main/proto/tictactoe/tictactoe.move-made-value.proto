@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "tictactoe/TicTacToeMove.proto";
+import "tictactoe/TicTacToeGameState.proto";
+
+// Event when a move is made
+message MoveMade {
+  string game_id = 1;
+  TicTacToeMove move = 2;
+  TicTacToeGameState new_state = 3;
+}

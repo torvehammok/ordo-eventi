@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+// Filter for player games query
+enum GameFilter {
+  GAME_FILTER_UNSPECIFIED = 0;
+  GAME_FILTER_ALL = 1;
+  GAME_FILTER_ACTIVE = 2;
+  GAME_FILTER_FINISHED = 3;
+  GAME_FILTER_WON = 4;
+  GAME_FILTER_LOST = 5;
+}

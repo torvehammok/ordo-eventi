@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.gaming;
+
+option java_multiple_files = true;
+
+message PlayerProto {
+  string id = 1;
+  string username = 2;
+  string display_name = 3;
+  double balance = 4;
+}

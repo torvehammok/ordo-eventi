@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "tictactoe/TicTacToeGameState.proto";
+
+// Response containing game state
+message GameStateResponse {
+  bool found = 1;
+  io.github.torvehammok.proto.tictactoe.TicTacToeGameState game_state = 2;
+}

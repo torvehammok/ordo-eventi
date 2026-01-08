@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "tictactoe/TicTacToeGameState.proto";
+
+// Aggregate event for game state snapshots
+message GameSnapshot {
+  string event_id = 1;
+  string game_id = 2;
+  int64 timestamp = 3;
+  TicTacToeGameState game_state = 4;
+}

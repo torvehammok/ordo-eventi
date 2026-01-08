@@ -1,0 +1,33 @@
+$schema: "../../main/resources/configmap.schema.yaml"
+kafkaAdmin:
+  bootstrapServers: $env:KAFKA_BOOTSTRAP_SERVERS
+  config:
+    bootstrap.servers: $env:KAFKA_BOOTSTRAP_SERVERS
+    schema.registry.url: $env:SCHEMA_REGISTRY_URL
+
+schemaRegistry:
+  baseUrl: $env:SCHEMA_REGISTRY_URL
+
+schemaSpecs:
+  dir: src/main/proto
+  includeOnly:
+    - glob: common/**
+    - glob: purchases/**
+  defaults:
+    compatibility: FULL
+
+topicSpecs:
+  topicDefaults:
+    partitions: 3
+    config:
+      cleanup.policy: delete
+      # two weeks in milliseconds
+      retention.ms: 1209600000
+  topics:
+    - name: private.topic-1
+    - name: private.topic-2
+    - name: private.topic-3
+    - name: private.topic-4
+      deleteTopic: true
+
+

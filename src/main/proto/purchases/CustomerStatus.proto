@@ -1,0 +1,12 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+enum CustomerStatusProto {
+  CUSTOMER_STATUS_UNSPECIFIED = 0;
+  CUSTOMER_STATUS_ACTIVE = 1;
+  CUSTOMER_STATUS_INACTIVE = 2;
+  CUSTOMER_STATUS_SUSPENDED = 3;
+  CUSTOMER_STATUS_AML = 4;
+}

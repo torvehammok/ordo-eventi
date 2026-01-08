@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+// Game status enumeration
+enum GameStatus {
+  GAME_STATUS_UNSPECIFIED = 0;
+  GAME_STATUS_WAITING_FOR_PLAYERS = 1;
+  GAME_STATUS_IN_PROGRESS = 2;
+  GAME_STATUS_FINISHED = 3;
+  GAME_STATUS_ABANDONED = 4;
+  GAME_STATUS_CANCELED = 5;
+}

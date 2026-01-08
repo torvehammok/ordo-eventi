@@ -1,0 +1,51 @@
+$schema: "./configmap.schema.yaml"
+kafkaAdmin:
+  config:
+    bootstrap.servers: pkc-zm3p0.eu-north-1.aws.confluent.cloud:9092
+    # add confluent sasl config
+    security.protocol: SASL_SSL
+    sasl.mechanism: PLAIN
+    sasl.jaas.config: $env:CC_KAFKA_JAAS_CONFIG
+
+schemaRegistry:
+  baseUrl: https://psrc-12d08v.eu-north-1.aws.confluent.cloud
+  config:
+    basic.auth.user.info: $env:CC_SCHEMA_REGISTRY_AUTH
+    basic.auth.credentials.source: USER_INFO
+
+sandbox:
+  enabled: true
+  prefix: dev-
+
+schemaSpecs:
+  dir: src/main/proto
+  includeOnly:
+    - glob: common/**
+    #    - glob: purchases/**
+    - glob: gaming-common/**
+    - glob: tictactoe/**
+  defaults:
+    compatibility: FULL
+
+topicSpecs:
+  topicDefaults:
+    partitions: 1
+    config:
+      cleanup.policy: delete
+      # two weeks in milliseconds
+      retention.ms: 1209600000
+      min.insync.replicas: 2
+      segment.bytes: 104857600
+      max.message.bytes: 2097164
+      message.timestamp.after.max.ms: 9223372036854775807
+      message.timestamp.before.max.ms: 9223372036854775807
+  topics:
+    #    - name: private.topic-1
+    #    - name: private.topic-2
+    - name: tictactoe.game-abandoned
+    - name: tictactoe.game-created
+    - name: tictactoe.game-finished
+    - name: tictactoe.game-snapshot
+    - name: tictactoe.move-made
+    - name: tictactoe.player-joined
+#    - name: private.topic-3

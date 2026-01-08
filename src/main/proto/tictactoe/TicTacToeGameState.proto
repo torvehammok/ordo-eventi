@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+import "gaming-common/Bet.proto";
+import "tictactoe/GameStatus.proto";
+
+// Represents the current state of a tic-tac-toe game
+message TicTacToeGameState {
+  string game_id = 1;
+  io.github.torvehammok.proto.gaming.PlayerProto player_x = 2;
+  io.github.torvehammok.proto.gaming.PlayerProto player_o = 3;
+  repeated string board = 4; // 9 elements representing the 3x3 board (empty, "X", "O")
+  io.github.torvehammok.proto.gaming.PlayerProto current_turn = 5;
+  GameStatus status = 6;
+  io.github.torvehammok.proto.gaming.PlayerProto winner = 7; // null if no winner yet
+  repeated int32 winning_positions = 8; // positions that form the winning line
+  int64 created_at = 9;
+  int64 updated_at = 10;
+  io.github.torvehammok.proto.gaming.BetProto bet = 11; // Optional betting information
+}

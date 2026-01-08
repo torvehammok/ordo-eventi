@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+import "gaming-common/Player.proto";
+import "tictactoe/PlayerRole.proto";
+
+// Event when a player joins the game
+message PlayerJoined {
+  string game_id = 1;
+  io.github.torvehammok.proto.gaming.PlayerProto player = 2;
+  PlayerRole role = 3; // X or O
+  int64 timestamp = 4;
+}

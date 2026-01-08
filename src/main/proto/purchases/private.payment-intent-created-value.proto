@@ -1,0 +1,19 @@
+syntax = "proto3";
+package io.github.torvehammok.ordoeventi.proto;
+
+option java_multiple_files = true;
+
+import "common/Money.proto";
+import "common/Address.proto";
+import "purchases/Product.proto";
+import "purchases/Offer.proto";
+
+message PaymentIntentCreatedProto {
+  string id = 1;
+  ProductProto product = 2;
+  OfferProto offer = 3;
+
+  io.github.torvehammok.proto.common.MoneyProto amount = 4;
+  io.github.torvehammok.proto.common.AddressProto billingAddress = 5;
+
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package io.github.torvehammok.proto.tictactoe;
+
+option java_multiple_files = true;
+
+// Response to game operations
+message GameCommandResponse {
+  bool success = 1;
+  string message = 2; // Error message or success confirmation
+  optional string game_id = 3; // Game ID for successful create operations
+}

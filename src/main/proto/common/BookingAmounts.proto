@@ -1,0 +1,14 @@
+syntax = "proto3";
+package io.github.torvehammok.proto.common;
+
+option java_multiple_files = true;
+
+import "common/Money.proto";
+
+message BookingAmounts {
+
+  io.github.torvehammok.proto.common.MoneyProto net = 1;
+  io.github.torvehammok.proto.common.MoneyProto tax = 2;
+  io.github.torvehammok.proto.common.MoneyProto gross = 3;
+
+}
