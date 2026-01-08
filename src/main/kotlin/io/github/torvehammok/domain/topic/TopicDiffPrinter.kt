@@ -36,6 +36,7 @@ class TopicDiffPrinter {
         for (diff in added) {
             builder.append("+ Topic '${diff.expected?.name}' will be created:\n")
             builder.append(printNode(diff.diffNode, diff.expected, diff.actual))
+            builder.append('\n')
         }
 
         if (changed.isNotEmpty() && builder.isNotEmpty()) {

@@ -55,9 +55,9 @@ class SchemaService(
         return plan
     }
 
-    fun findSchemasGraph(): SchemasGraph {
+    fun listSchemasNamespaces(namespace : String? = null): List<NamespaceSchemas> {
         val depsGraph = schemaDeps.resolveSchemaDeps(Paths.get(schemasSpecProps.dir))
-        return depsGraph
+        return depsGraph.listNamespaces(namespace = namespace)
     }
 
     fun applySchemaUpdates(inclusionGlobs: List<String>? = null): SchemaUpdatePlan {

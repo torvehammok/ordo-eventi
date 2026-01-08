@@ -12,6 +12,7 @@ private val log = LoggerFactory.getLogger(RootCommand::class.java)
         SchemasPlanCommand::class,
         SchemasApplyCommand::class,
         SchemasTreeCommand::class,
+        RunAllCommand::class,
         SchemasDestroyCommand::class
     ]
 )
