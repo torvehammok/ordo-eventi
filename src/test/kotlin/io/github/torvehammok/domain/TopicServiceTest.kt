@@ -57,16 +57,19 @@ class TopicServiceTest : OrdoEventiTest() {
                     + cleanup.policy=delete
                     + retention.ms=1209600000
                 + partitions=3
+            
             + Topic 'private.topic-2' will be created:
                 + configOverrides:
                     + cleanup.policy=delete
                     + retention.ms=1209600000
                 + partitions=3
+            
             + Topic 'private.topic-3' will be created:
                 + configOverrides:
                     + cleanup.policy=delete
                     + retention.ms=1209600000
                 + partitions=3
+
 
             """.trimIndent()
         )
@@ -89,11 +92,13 @@ class TopicServiceTest : OrdoEventiTest() {
                     + cleanup.policy=delete
                     + retention.ms=1209600000
                 + partitions=3
+            
             + Topic 'private.topic-3' will be created:
                 + configOverrides:
                     + cleanup.policy=delete
                     + retention.ms=1209600000
                 + partitions=3
+            
             
             ~ Topic 'private.topic-2' will be updated:
                   partitions=3
@@ -132,11 +137,13 @@ class TopicServiceTest : OrdoEventiTest() {
                     + cleanup.policy=delete
                     + retention.ms=1209600000
                 + partitions=3
+            
             + Topic 'private.topic-3' will be created:
                 + configOverrides:
                     + cleanup.policy=delete
                     + retention.ms=1209600000
                 + partitions=3
+            
             
             ~ Topic 'private.topic-2' will be updated:
                   partitions=3

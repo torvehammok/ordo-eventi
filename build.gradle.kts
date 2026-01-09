@@ -77,7 +77,7 @@ tasks.register<JavaExec>("topics-plan") {
     description = "Run the Kotlin application"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("io.github.torvehammok.OrdoEventiApplicationKt")
-    args = listOf("topics-plan")
+    args = listOf("topics-plan", "-c", "src/main/resources/configmap.yaml")
 }
 
 tasks.register<JavaExec>("topics-apply") {
@@ -85,7 +85,7 @@ tasks.register<JavaExec>("topics-apply") {
     description = "Run the Kotlin application"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("io.github.torvehammok.OrdoEventiApplicationKt")
-    args = listOf("topics-apply")
+    args = listOf("topics-apply", "-c", "src/main/resources/configmap.yaml")
 }
 
 tasks.register<JavaExec>("schemas-plan") {

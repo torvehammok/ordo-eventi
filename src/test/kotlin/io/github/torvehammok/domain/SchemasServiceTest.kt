@@ -42,24 +42,24 @@ class SchemasServiceTest : OrdoEventiTest() {
 
         assertThat(printedPlan).isEqualToIgnoringWhitespace(
             """
-               + Schema 'purchases/PurchaseStatus.proto needs to be created
-               + Schema 'purchases/Product.proto needs to be created
-               + Schema 'purchases/PaymentStatus.proto needs to be created
-               + Schema 'purchases/Payment.proto needs to be created
-               + Schema 'purchases/CustomerStatus.proto needs to be created
-               + Schema 'purchases/CustomerDeleteProto.proto needs to be created
-               + Schema 'purchases/BooFoo.proto needs to be created
-               + Schema 'common/Money.proto needs to be created
-               + Schema 'private.topic-3-value needs to be created
-               + Schema 'purchases/Offer.proto needs to be created
-               + Schema 'common/DateRange.proto needs to be created
-               + Schema 'common/BookingAmounts.proto needs to be created
-               + Schema 'common/Address.proto needs to be created
-               + Schema 'purchases/CustomerUpdateProto.proto needs to be created
-               + Schema 'private.topic-2-value needs to be created
-               + Schema 'purchases/Purchase.proto needs to be created
-               + Schema 'private.topic-1-value needs to be created
-               + Schema 'private.payment-intent-created-value needs to be created
+              + Schema 'purchases/PurchaseStatus.proto needs to be created
+              + Schema 'purchases/Product.proto needs to be created
+              + Schema 'purchases/PaymentStatus.proto needs to be created
+              + Schema 'purchases/Payment.proto needs to be created
+              + Schema 'purchases/CustomerStatus.proto needs to be created
+              + Schema 'purchases/CustomerDeleteProto.proto needs to be created
+              + Schema 'purchases/BooFoo.proto needs to be created
+              + Schema 'common/Money.proto needs to be created
+              + Schema 'purchases/Offer.proto needs to be created
+              + Schema 'private.topic-3-value needs to be created
+              + Schema 'common/DateRange.proto needs to be created
+              + Schema 'common/BookingAmounts.proto needs to be created
+              + Schema 'common/Address.proto needs to be created
+              + Schema 'purchases/Purchase.proto needs to be created
+              + Schema 'private.topic-1-value needs to be created
+              + Schema 'purchases/CustomerUpdateProto.proto needs to be created
+              + Schema 'private.topic-2-value needs to be created
+              + Schema 'private.payment-intent-created-value needs to be created
             """.trimIndent()
         )
     }
@@ -137,13 +137,13 @@ class SchemasServiceTest : OrdoEventiTest() {
               # Schema 'purchases/PurchaseStatus.proto' is in sync
             
               ~ Schema 'common/Money.proto' needs to be updated due to changes in definition
-              ~ Schema 'private.topic-3-value' needs to be updated due to changes in references
               ~ Schema 'purchases/Offer.proto' needs to be updated due to changes in references
               ~ Schema 'purchases/Purchase.proto' needs to be updated due to changes in references
                 ~ Schema 'private.topic-1-value' refs will be updated due to upstream
-              ~ Schema 'private.payment-intent-created-value' needs to be updated due to changes in references
               ~ Schema 'purchases/CustomerUpdateProto.proto' needs to be updated due to changes in references
                 ~ Schema 'private.topic-2-value' refs will be updated due to upstream
+              ~ Schema 'private.topic-3-value' needs to be updated due to changes in references
+              ~ Schema 'private.payment-intent-created-value' needs to be updated due to changes in references
               ~ Schema 'common/BookingAmounts.proto' needs to be updated due to changes in references
             """.trimIndent()
         )
