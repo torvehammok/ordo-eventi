@@ -5,6 +5,9 @@ import io.github.torvehammok.cli.RootCommand
 import picocli.CommandLine
 
 fun main(args: Array<String>) {
-    dotenv { systemProperties = true }
+    dotenv {
+        systemProperties = true
+        ignoreIfMissing = true
+    }
     CommandLine(RootCommand()).execute(*args)
 }

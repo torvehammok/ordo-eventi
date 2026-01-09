@@ -182,36 +182,36 @@ class TicTacToeTest : OrdoEventiTest() {
 
         assertThat(printedPlan).isEqualToIgnoringWhitespace(
             """
-                + Schema 'tictactoe/PlayerRole.proto needs to be created
-                + Schema 'tictactoe/GetGameStateQuery.proto needs to be created
-                + Schema 'tictactoe/GetGameHistoryQuery.proto needs to be created
-                + Schema 'tictactoe/GameStatus.proto needs to be created
-                + Schema 'tictactoe/GameFilter.proto needs to be created
-                + Schema 'tictactoe/GameEndReason.proto needs to be created
-                + Schema 'tictactoe/GameCommandResponse.proto needs to be created
-                + Schema 'gaming-common/Player.proto needs to be created
-                + Schema 'tictactoe/JoinGameCommand.proto needs to be created
-                + Schema 'tictactoe.game-abandoned-value needs to be created
-                + Schema 'tictactoe/GetPlayerGamesQuery.proto needs to be created
-                + Schema 'tictactoe.player-joined-value needs to be created
-                + Schema 'tictactoe/MakeMoveCommand.proto needs to be created
-                + Schema 'tictactoe/TicTacToeMove.proto needs to be created
-                + Schema 'tictactoe/ForfeitGameCommand.proto needs to be created
-                ~ Schema 'common/Money.proto' needs to be updated due to changes in definition
-                ~ Schema 'gaming-common/Bet.proto' needs to be updated due to changes in definition & references
-                + Schema 'tictactoe/TicTacToeGameState.proto needs to be created
-                + Schema 'tictactoe/GameHistoryResponse.proto needs to be created
-                + Schema 'tictactoe.move-made-value needs to be created
-                + Schema 'tictactoe/GameStateResponse.proto needs to be created
-                + Schema 'tictactoe.game-snapshot-value needs to be created
-                + Schema 'tictactoe/GamesListResponse.proto needs to be created
-                + Schema 'tictactoe.game-created-value needs to be created
-                + Schema 'tictactoe/GetAvailableGamesQuery.proto needs to be created
-                + Schema 'tictactoe.game-finished-value needs to be created
-                + Schema 'tictactoe/CreateGameCommand.proto needs to be created
-                + Schema 'common/DateRange.proto needs to be created
-                + Schema 'common/BookingAmounts.proto needs to be created
-                + Schema 'common/Address.proto needs to be created
+              + Schema 'tictactoe/PlayerRole.proto needs to be created
+              + Schema 'tictactoe/GetGameStateQuery.proto needs to be created
+              + Schema 'tictactoe/GetGameHistoryQuery.proto needs to be created
+              + Schema 'tictactoe/GameStatus.proto needs to be created
+              + Schema 'tictactoe/GameFilter.proto needs to be created
+              + Schema 'tictactoe/GameEndReason.proto needs to be created
+              + Schema 'tictactoe/GameCommandResponse.proto needs to be created
+              + Schema 'gaming-common/Player.proto needs to be created
+              + Schema 'tictactoe/TicTacToeMove.proto needs to be created
+              + Schema 'tictactoe/MakeMoveCommand.proto needs to be created
+              + Schema 'tictactoe/JoinGameCommand.proto needs to be created
+              + Schema 'tictactoe/GetPlayerGamesQuery.proto needs to be created
+              + Schema 'tictactoe/ForfeitGameCommand.proto needs to be created
+              + Schema 'tictactoe.player-joined-value needs to be created
+              + Schema 'tictactoe.game-abandoned-value needs to be created
+              ~ Schema 'common/Money.proto' needs to be updated due to changes in definition
+              + Schema 'tictactoe/GetAvailableGamesQuery.proto needs to be created
+              + Schema 'tictactoe/CreateGameCommand.proto needs to be created
+              + Schema 'tictactoe.game-finished-value needs to be created
+              + Schema 'tictactoe.game-created-value needs to be created
+              ~ Schema 'gaming-common/Bet.proto' needs to be updated due to changes in definition & references
+              + Schema 'tictactoe/TicTacToeGameState.proto needs to be created
+              + Schema 'tictactoe/GamesListResponse.proto needs to be created
+              + Schema 'tictactoe/GameStateResponse.proto needs to be created
+              + Schema 'tictactoe/GameHistoryResponse.proto needs to be created
+              + Schema 'tictactoe.move-made-value needs to be created
+              + Schema 'tictactoe.game-snapshot-value needs to be created
+              + Schema 'common/DateRange.proto needs to be created
+              + Schema 'common/BookingAmounts.proto needs to be created
+              + Schema 'common/Address.proto needs to be created
             """.trimIndent()
         )
 

@@ -3,6 +3,7 @@
 package io.github.torvehammok.domain.schema
 
 import com.google.common.graph.Graph
+import com.google.common.graph.SuccessorsFunction
 import com.google.common.graph.Traverser
 
 class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
@@ -11,7 +12,10 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
         val schemas = graph.nodes()
 
         val changedSchemasNodes = changedSchemas.map { schemas.find { schema -> it == schema.subject } }
-        return Traverser.forGraph(graph).depthFirstPostOrder(changedSchemasNodes).reversed()
+
+        return Traverser
+            .forGraph(sortedSuccessorsFn(graph))
+            .depthFirstPostOrder(changedSchemasNodes).reversed()
     }
 
     override fun listNamespaces(namespace: String?): List<NamespaceSchemas> {
@@ -30,25 +34,27 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
 
             val items = mutableListOf<NamespaceSchemas.Item>()
 
-            Traverser.forGraph(graph).depthFirstPostOrder(startingPoints).reversed().forEach {
-                if (it.packageName != namespace) {
-                    return@forEach
-                }
+            Traverser
+                .forGraph(sortedSuccessorsFn(graph))
+                .depthFirstPostOrder(startingPoints).reversed().forEach {
+                    if (it.packageName != namespace) {
+                        return@forEach
+                    }
 
-                val successors = graph.predecessors(it).sortedBy { node -> node.subject }
+                    val successors = graph.predecessors(it).sortedBy { node -> node.subject }
 
-                items.add(
-                    NamespaceSchemas.Item(
-                        name = it.filename,
-                        deps = successors.map { succ ->
-                            NamespaceSchemas.Dep(
-                                name = succ.filename,
-                                namespace = if (succ.packageName != it.packageName) succ.packageName else null
-                            )
-                        }
+                    items.add(
+                        NamespaceSchemas.Item(
+                            name = it.filename,
+                            deps = successors.map { succ ->
+                                NamespaceSchemas.Dep(
+                                    name = succ.filename,
+                                    namespace = if (succ.packageName != it.packageName) succ.packageName else null
+                                )
+                            }
+                        )
                     )
-                )
-            }
+                }
 
             result.add(NamespaceSchemas(namespace = namespace, schemas = items))
         }
@@ -61,7 +67,9 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
             .filter { graph.predecessors(it).isEmpty() }
             .sortedBy { it.subject }
 
-        return Traverser.forGraph(graph).depthFirstPostOrder(startingPoints).toList()
+        return Traverser
+            .forGraph(sortedSuccessorsFn(graph))
+            .depthFirstPostOrder(startingPoints).toList()
     }
 
     override fun listDeps(subject: String): List<SchemaDef> {
@@ -71,5 +79,11 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
 
     override fun allSchemas(): Set<SchemaDef> {
         return graph.nodes()
+    }
+}
+
+private fun sortedSuccessorsFn(graph: Graph<SchemaDef>): SuccessorsFunction<SchemaDef> {
+    return SuccessorsFunction<SchemaDef> { node ->
+        graph.successors(node).sortedBy { it.subject }
     }
 }
