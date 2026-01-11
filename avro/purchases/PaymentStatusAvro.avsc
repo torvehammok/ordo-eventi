@@ -1,0 +1,12 @@
+{
+  "type": "enum",
+  "name": "PaymentStatusAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "symbols": [
+    "PAYMENT_STATUS_UNSPECIFIED",
+    "PAYMENT_STATUS_PENDING",
+    "PAYMENT_STATUS_COMPLETED",
+    "PAYMENT_STATUS_REFUNDED",
+    "PAYMENT_STATUS_FAILED"
+  ]
+}

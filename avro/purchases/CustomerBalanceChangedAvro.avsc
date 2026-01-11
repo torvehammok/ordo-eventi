@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "CustomerBalanceChangedAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "nextBalance", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null},
+    {"name": "customerId", "type": ["null", "string"], "avro.java.string": "String", "default": null}
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "type": "record",
+  "name": "CrazyAvro",
+  "namespace": "io.github.torvehammok.avro.common",
+  "fields": [
+    {
+      "name": "net",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.MoneyAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "tax",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.MoneyAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "gross",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.MoneyAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "format",
+      "type": {
+        "type": "record",
+        "name": "FormatAvro",
+        "fields": [
+          {
+            "name": "code",
+            "type": [
+              "null",
+              "string"
+            ],
+            "avro.java.string": "String",
+            "default": null
+          },
+          {
+            "name": "description",
+            "type": [
+              "null",
+              "string"
+            ],
+            "avro.java.string": "String",
+            "default": null
+          },
+          {
+            "name": "timezoneRange",
+            "type": {
+              "type": "map",
+              "values": {
+                "type": "record",
+                "name": "TimezoneDateRangeAvro",
+                "fields": [
+                  {
+                    "name": "startDate",
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "avro.java.string": "String",
+                    "default": null
+                  },
+                  {
+                    "name": "endDate",
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "avro.java.string": "String",
+                    "default": null
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "address",
+            "type": [
+              "null",
+              {
+                "type": "array",
+                "items": {
+                  "type": "io.github.torvehammok.avro.common.AddressAvro"
+                }
+              }
+            ],
+            "default": null
+          }
+        ]
+      }
+    }
+  ]
+}

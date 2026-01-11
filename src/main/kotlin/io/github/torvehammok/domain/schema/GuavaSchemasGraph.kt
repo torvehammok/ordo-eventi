@@ -69,10 +69,11 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
 
         return Traverser
             .forGraph(sortedSuccessorsFn(graph))
-            .depthFirstPostOrder(startingPoints).toList()
+            .depthFirstPostOrder(startingPoints)
+            .toList()
     }
 
-    override fun listDeps(subject: String): List<SchemaDef> {
+    override fun findDepsForSubject(subject: String): List<SchemaDef> {
         val schema = graph.nodes().find { it.subject == subject }!!
         return graph.predecessors(schema).toList()
     }

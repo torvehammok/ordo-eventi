@@ -1,0 +1,14 @@
+{
+  "type": "enum",
+  "name": "GameStatusAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "symbols": [
+    "GAME_STATUS_UNSPECIFIED",
+    "GAME_STATUS_WAITING_FOR_PLAYERS",
+    "GAME_STATUS_IN_PROGRESS",
+    "GAME_STATUS_FINISHED",
+    "GAME_STATUS_ABANDONED",
+    "GAME_STATUS_CANCELED"
+  ]
+}
+

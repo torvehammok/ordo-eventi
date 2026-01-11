@@ -1,5 +1,12 @@
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.apache.avro.tool.SpecificCompilerTool
+
+buildscript {
+    dependencies {
+        classpath("org.apache.avro:avro-tools:1.11.3")
+    }
+}
 
 plugins {
     id("java")
@@ -41,6 +48,9 @@ dependencies {
     implementation("io.confluent:kafka-protobuf-serializer:$confluentVersion")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
+    // Avro dependencies
+    implementation("org.apache.avro:avro:1.11.3")
+
     testImplementation("io.confluent:kafka-protobuf-serializer:$confluentVersion")
 
 
@@ -70,6 +80,14 @@ kotlin {
     }
 }
 
+tasks.test {
+    useJUnitPlatform()
+
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+    }
+}
 
 // task to run kotlin application
 tasks.register<JavaExec>("topics-plan") {
@@ -129,19 +147,64 @@ tasks.register<JavaExec>("schemas-destroy") {
     args = listOf("schemas-destroy", "-c", "src/main/resources/configmap.yaml")
 }
 
-
-
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:4.33.2"
     }
 }
 
-// add proto generated sources to main source set
 sourceSets {
-    main {
+    test {
         java {
-            srcDir("build/generated/source/proto/main/java")
+            srcDir("build/generated/sources/proto/main/java")
+            srcDir("build/generated/sources/avro/test/java")
         }
     }
+}
+
+// Task to generate Avro Java classes using SpecificCompilerTool
+tasks.register("generateTestAvroJava") {
+    group = "build"
+    description = "Generate Java classes from Avro schemas in avro/common using SpecificCompilerTool"
+
+    val avroSchemasDir = "avro/common"
+    val avroCodeGenerationDir = "build/generated/sources/avro/test/java"
+
+    // Define the task inputs and outputs for the Gradle up-to-date checks
+    inputs.dir(avroSchemasDir)
+    outputs.dir(avroCodeGenerationDir)
+
+    // The Avro code generation logs to the standard streams. Redirect the standard streams to the Gradle log
+    logging.captureStandardOutput(LogLevel.INFO)
+    logging.captureStandardError(LogLevel.ERROR)
+
+    doFirst {
+        file(avroCodeGenerationDir).deleteRecursively()
+        file(avroCodeGenerationDir).mkdirs()
+    }
+
+    doLast {
+        SpecificCompilerTool().run(
+            System.`in`, System.out, System.err, listOf(
+                "-encoding",
+                "UTF-8",
+                "-string",
+                "-fieldVisibility",
+                "private",
+                "-noSetters",
+                "schema",
+                "avro/common/AddressAvro.avsc",
+                "avro/common/MoneyAvro.avsc",
+                "avro/common/DateRangeAvro.avsc",
+                "avro/common/BookingAmountsAvro.avsc",
+                file(avroCodeGenerationDir).absolutePath
+            )
+        )
+    }
+}
+
+// Make test compilation depend on Avro generation
+tasks.named("compileTestKotlin") {
+    dependsOn("generateTestAvroJava")
+    dependsOn("generateTestProto")
 }

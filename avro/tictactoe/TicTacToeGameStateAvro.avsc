@@ -1,0 +1,102 @@
+{
+  "type": "record",
+  "name": "TicTacToeGameStateAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "gameId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "playerX",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "playerO",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "board",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": "string"
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "currentTurn",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.tictactoe.GameStatusAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "winner",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "winningPositions",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": "int"
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "createdAt",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    },
+    {
+      "name": "updatedAt",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    },
+    {
+      "name": "bet",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.BetAvro"
+      ],
+      "default": null
+    }
+  ]
+}

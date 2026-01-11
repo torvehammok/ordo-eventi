@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "PurchaseAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "purchaseId", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "customerId", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "product", "type": ["null", "io.github.torvehammok.ordoeventi.avro.ProductAvro"], "default": null},
+    {"name": "offer", "type": ["null", "io.github.torvehammok.ordoeventi.avro.OfferAvro"], "default": null},
+    {"name": "net", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null},
+    {"name": "tax", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null},
+    {"name": "gross", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null},
+    {"name": "billingAddress", "type": ["null", "io.github.torvehammok.avro.common.AddressAvro"], "default": null},
+    {"name": "payment", "type": ["null", "io.github.torvehammok.ordoeventi.avro.PaymentAvro"], "default": null}
+  ]
+}

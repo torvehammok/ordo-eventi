@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "GetGameStateQueryAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "gameId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    }
+  ]
+}

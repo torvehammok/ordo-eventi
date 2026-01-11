@@ -1,0 +1,70 @@
+{
+  "type": "record",
+  "name": "MakeMoveCommandAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "gameId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "player",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "row",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null
+    },
+    {
+      "name": "column",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null
+    },
+    {
+      "name": "timestamp",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "TimestampAvro",
+          "namespace": "google.protobuf",
+          "fields": [
+            {
+              "name": "seconds",
+              "type": [
+                "null",
+                "long"
+              ],
+              "default": null
+            },
+            {
+              "name": "nanos",
+              "type": [
+                "null",
+                "int"
+              ],
+              "default": null
+            }
+          ]
+        }
+      ],
+      "default": null
+    }
+  ]
+}

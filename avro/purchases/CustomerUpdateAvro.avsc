@@ -1,0 +1,140 @@
+{
+  "type": "record",
+  "name": "CustomerUpdateAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {
+      "name": "customerId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "name",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "email",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "phoneNumber",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": [
+        "null",
+        "io.github.torvehammok.ordoeventi.avro.CustomerStatusAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "balance",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.MoneyAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "address",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.AddressAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "auditInfo",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "AuditInfoAvro",
+          "fields": [
+            {
+              "name": "updatedAt",
+              "type": [
+                "null",
+                {
+                  "type": "record",
+                  "name": "TimestampAvro",
+                  "namespace": "google.protobuf",
+                  "fields": [
+                    {
+                      "name": "seconds",
+                      "type": [
+                        "null",
+                        "long"
+                      ],
+                      "default": null
+                    },
+                    {
+                      "name": "nanos",
+                      "type": [
+                        "null",
+                        "int"
+                      ],
+                      "default": null
+                    }
+                  ]
+                }
+              ],
+              "default": null
+            },
+            {
+              "name": "createdAt",
+              "type": [
+                "null",
+                {
+                  "type": "record",
+                  "name": "TimestampAvro",
+                  "namespace": "google.protobuf",
+                  "fields": [
+                    {
+                      "name": "seconds",
+                      "type": [
+                        "null",
+                        "long"
+                      ],
+                      "default": null
+                    },
+                    {
+                      "name": "nanos",
+                      "type": [
+                        "null",
+                        "int"
+                      ],
+                      "default": null
+                    }
+                  ]
+                }
+              ],
+              "default": null
+            }
+          ]
+        }
+      ],
+      "default": null
+    }
+  ]
+}

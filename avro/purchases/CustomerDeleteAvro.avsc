@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "CustomerDeleteAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "customerId", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "deletedAt", "type": ["null", {
+      "type": "record",
+      "name": "DurationAvro",
+      "namespace": "google.protobuf",
+      "fields": [
+        {"name": "seconds", "type": ["null", "long"], "default": null},
+        {"name": "nanos", "type": ["null", "int"], "default": null}
+      ]
+    }], "default": null}
+  ]
+}

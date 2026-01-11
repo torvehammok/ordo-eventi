@@ -21,13 +21,11 @@ data class RegistrySchema(
     val subject: String,
     var version: Int,
     val definition: String,
-    val file: String?,
     val refs: List<RegistrySchemaRef>
 )
 
 data class RegistrySchemaRef(
     val subject: String,
-    val file: String?,
     val version: Int,
     val name: String
 )

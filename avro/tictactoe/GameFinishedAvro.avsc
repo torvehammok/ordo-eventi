@@ -1,0 +1,59 @@
+{
+  "type": "record",
+  "name": "GameFinishedAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "gameId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "winner",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "reason",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.tictactoe.GameEndReasonAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "winningPositions",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": "int"
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "timestamp",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    },
+    {
+      "name": "prize",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.MoneyAvro"
+      ],
+      "default": null
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "type": "record",
+  "name": "PaymentIntentCreatedAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {
+      "name": "id",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "product",
+      "type": [
+        "null",
+        "io.github.torvehammok.ordoeventi.avro.ProductAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "offer",
+      "type": [
+        "null",
+        "io.github.torvehammok.ordoeventi.avro.OfferAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "amount",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.MoneyAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "billingAddress",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.common.AddressAvro"
+      ],
+      "default": null
+    }
+  ]
+}

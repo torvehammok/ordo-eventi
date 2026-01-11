@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "GameCommandResponseAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {"name": "success", "type": ["null", "boolean"], "default": null},
+    {"name": "message", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "gameId", "type": ["null", "string"], "avro.java.string": "String", "default": null}
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "type": "record",
+  "name": "PlayerJoinedAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "gameId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "player",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "role",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.tictactoe.PlayerRoleAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "timestamp",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    }
+  ]
+}

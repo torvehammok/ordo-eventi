@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "GameSnapshotAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "eventId",
+      "type": ["null", "string"],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "gameId",
+      "type": ["null", "string"],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "timestamp",
+      "type": ["null", "long"],
+      "default": null
+    },
+    {
+      "name": "gameState",
+      "type": ["null", "io.github.torvehammok.avro.tictactoe.TicTacToeGameStateAvro"],
+      "default": null
+    }
+  ]
+}

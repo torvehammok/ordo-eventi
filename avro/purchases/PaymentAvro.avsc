@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "PaymentAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "externalId", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "status", "type": ["null", "io.github.torvehammok.ordoeventi.avro.PaymentStatusAvro"], "default": null},
+    {"name": "externalCustomerId", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "method", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "wallet", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "amount", "type": ["null", "double"], "default": null},
+    {"name": "currency", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "createdAt", "type": ["null", "string"], "avro.java.string": "String", "default": null}
+  ]
+}

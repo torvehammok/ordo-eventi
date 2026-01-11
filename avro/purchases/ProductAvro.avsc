@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "ProductAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "code", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "name", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "features", "type": ["null", {"type": "array", "items": "string"}], "default": null}
+  ]
+}
