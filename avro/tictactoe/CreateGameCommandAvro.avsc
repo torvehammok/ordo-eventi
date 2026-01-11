@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "CreateGameCommandAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {"name": "creator", "type": ["null", "io.github.torvehammok.avro.gaming.PlayerAvro"], "default": null},
+    {"name": "stake", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null},
+    {"name": "privateGame", "type": ["null", "boolean"], "default": null},
+    {"name": "invitationCode", "type": ["null", "string"], "avro.java.string": "String", "default": null}
+  ]
+}

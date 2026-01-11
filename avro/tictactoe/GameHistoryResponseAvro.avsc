@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "GameHistoryResponseAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {"name": "gameId", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "moves", "type": ["null", {"type": "array", "items": "io.github.torvehammok.avro.tictactoe.TicTacToeMoveAvro"}], "default": null},
+    {"name": "finalState", "type": ["null", "io.github.torvehammok.avro.tictactoe.TicTacToeGameStateAvro"], "default": null}
+  ]
+}

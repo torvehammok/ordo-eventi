@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "DateRangeAvro",
+  "namespace": "io.github.torvehammok.avro.common",
+  "fields": [
+    {
+      "name": "startDate",
+      "type": ["null", "string"],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "endDate",
+      "type": ["null", "string"],
+      "avro.java.string": "String",
+      "default": null
+    }
+  ]
+}

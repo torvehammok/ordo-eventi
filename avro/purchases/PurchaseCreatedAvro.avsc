@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "PurchaseCreatedAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {
+      "name": "createdAt",
+      "type": ["null", {
+        "type": "record",
+        "name": "TimestampAvro",
+        "namespace": "google.protobuf",
+        "fields": [
+          {"name": "seconds", "type": ["null", "long"], "default": null},
+          {"name": "nanos", "type": ["null", "int"], "default": null}
+        ]
+      }],
+      "default": null
+    },
+    {
+      "name": "purchase",
+      "type": ["null", "io.github.torvehammok.ordoeventi.avro.PurchaseAvro"],
+      "default": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "ForfeitGameCommandAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "gameId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    },
+    {
+      "name": "player",
+      "type": [
+        "null",
+        "io.github.torvehammok.avro.gaming.PlayerAvro"
+      ],
+      "default": null
+    },
+    {
+      "name": "reason",
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String",
+      "default": null
+    }
+  ]
+}

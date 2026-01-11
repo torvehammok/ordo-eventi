@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "GameCreatedAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {"name": "gameId", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "creator", "type": ["null", "io.github.torvehammok.avro.gaming.PlayerAvro"], "default": null},
+    {"name": "timestamp", "type": ["null", "long"], "default": null},
+    {"name": "stake", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null}
+  ]
+}

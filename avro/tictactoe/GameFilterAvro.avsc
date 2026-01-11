@@ -1,0 +1,14 @@
+{
+  "type": "enum",
+  "name": "GameFilterAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "symbols": [
+    "GAME_FILTER_UNSPECIFIED",
+    "GAME_FILTER_ALL",
+    "GAME_FILTER_ACTIVE",
+    "GAME_FILTER_FINISHED",
+    "GAME_FILTER_WON",
+    "GAME_FILTER_LOST"
+  ]
+}
+

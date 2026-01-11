@@ -1,0 +1,13 @@
+{
+  "type": "enum",
+  "name": "PurchaseStatusAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "symbols": [
+    "PURCHASE_STATUS_UNSPECIFIED",
+    "PURCHASE_STATUS_ACTIVE",
+    "PURCHASE_STATUS_COMPLETED",
+    "PURCHASE_STATUS_CANCELLED",
+    "PURCHASE_STATUS_REFUNDED",
+    "PURCHASE_STATUS_AML"
+  ]
+}

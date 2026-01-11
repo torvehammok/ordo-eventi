@@ -1,0 +1,12 @@
+{
+  "type": "enum",
+  "name": "CustomerStatusAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "symbols": [
+    "CUSTOMER_STATUS_UNSPECIFIED",
+    "CUSTOMER_STATUS_ACTIVE",
+    "CUSTOMER_STATUS_INACTIVE",
+    "CUSTOMER_STATUS_SUSPENDED",
+    "CUSTOMER_STATUS_AML"
+  ]
+}

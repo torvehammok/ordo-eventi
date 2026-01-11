@@ -6,7 +6,7 @@ interface SchemasGraph {
 
     fun dependencyGraphItems(): List<SchemaDef>
 
-    fun listDeps(subject: String): List<SchemaDef>
+    fun findDepsForSubject(subject: String): List<SchemaDef>
 
     fun allSchemas(): Set<SchemaDef>
 

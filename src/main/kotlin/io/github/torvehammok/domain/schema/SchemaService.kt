@@ -55,7 +55,7 @@ class SchemaService(
         return plan
     }
 
-    fun listSchemasNamespaces(namespace : String? = null): List<NamespaceSchemas> {
+    fun listSchemasNamespaces(namespace: String? = null): List<NamespaceSchemas> {
         val depsGraph = schemaDeps.resolveSchemaDeps(Paths.get(schemasSpecProps.dir))
         return depsGraph.listNamespaces(namespace = namespace)
     }
@@ -94,10 +94,6 @@ class SchemaService(
         val ops = mutableListOf<SchemaOp>()
 
         for (expectedSchema in expectedSchemas) {
-            if (expectedSchema.file == null) {
-                throw IllegalStateException("Expected schema file cannot be null for subject: ${expectedSchema.subject}")
-            }
-
             val currentSchema = currentSchemas.find { it.subject == expectedSchema.subject }
             val diff = differ.compare(expectedSchema, currentSchema)
 
@@ -136,24 +132,24 @@ class SchemaService(
 
         val expectedSchemas = schemaDefinitions.map {
             val protobufSchema = ProtobufSchema(Files.readString(dir.resolve(it.filename)))
-            val deps = depsGraph.listDeps(it.subject)
+            val deps = depsGraph.findDepsForSubject(it.subject)
+
+            val refs = deps.map { ref ->
+                val refSchema = currentSchemas.find { s -> s.subject == ref.subject }
+
+                RegistrySchemaRef(
+                    name = ref.filename,
+                    subject = ref.subject,
+                    version = refSchema?.version ?: -1,
+                )
+            }
 
             RegistrySchema(
                 id = -1,
                 subject = it.subject,
                 version = 0,
                 definition = protobufSchema.canonicalString(),
-                file = it.filename,
-                refs = deps.map { ref ->
-                    val refSchema = currentSchemas.find { s -> s.subject == ref.subject }
-
-                    RegistrySchemaRef(
-                        name = ref.filename,
-                        subject = ref.subject,
-                        file = ref.filename,
-                        version = refSchema?.version ?: -1,
-                    )
-                }
+                refs = refs
             )
         }
 
@@ -230,17 +226,20 @@ private fun toLatestSchemaRefs(
         RegistrySchemaRef(
             name = ref.name,
             subject = ref.subject,
-            file = ref.file,
             version = refSchema?.version ?: -1,
         )
     }
 }
 
-fun toSubjectName(string: String, sandboxProps: SandboxProps): String {
-    val schemaName = if (string.endsWith("-value.proto") || string.endsWith("-key.proto")) {
-        Paths.get(string).fileName.toString().removeSuffix(".proto")
-    } else {
-        string
+fun toSubjectName(fileName: String, sandboxProps: SandboxProps): String {
+    val schemaName = if (fileName.endsWith("-value.proto") || fileName.endsWith("-key.proto")) {
+        Paths.get(fileName).fileName.toString().removeSuffix(".proto")
+    }
+    else if (fileName.endsWith("-value.avsc") || fileName.endsWith("-key.avsc")) {
+        Paths.get(fileName).fileName.toString().removeSuffix(".avsc")
+    }
+    else {
+        fileName
     }
 
     return if (sandboxProps.enabled) {

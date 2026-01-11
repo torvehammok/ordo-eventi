@@ -9,7 +9,7 @@ schemaRegistry:
   baseUrl: $env:SCHEMA_REGISTRY_URL
 
 schemaSpecs:
-  dir: src/main/proto
+  dir: src/test/proto
   includeOnly:
     - glob: common/**
     - glob: purchases/**

@@ -1,0 +1,12 @@
+{
+  "type": "enum",
+  "name": "PlayerRoleAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "symbols": [
+    "PLAYER_ROLE_UNSPECIFIED",
+    "PLAYER_ROLE_X",
+    "PLAYER_ROLE_O",
+    "PLAYER_ROLE_SPECTATOR"
+  ]
+}
+

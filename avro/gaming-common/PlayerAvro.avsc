@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "PlayerAvro",
+  "namespace": "io.github.torvehammok.avro.gaming",
+  "fields": [
+    {"name": "id", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "username", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "displayName", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "balance", "type": ["null", "double"], "default": null}
+  ]
+}

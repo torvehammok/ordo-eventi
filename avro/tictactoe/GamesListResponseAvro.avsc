@@ -1,0 +1,34 @@
+{
+  "type": "record",
+  "name": "GamesListResponseAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "games",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": "io.github.torvehammok.avro.tictactoe.TicTacToeGameStateAvro"
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "totalCount",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null
+    },
+    {
+      "name": "hasMore",
+      "type": [
+        "null",
+        "boolean"
+      ],
+      "default": null
+    }
+  ]
+}

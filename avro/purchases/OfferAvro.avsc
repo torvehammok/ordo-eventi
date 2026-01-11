@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "OfferAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "code", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "description", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "price", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null},
+    {"name": "productCode", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "status", "type": ["null", "io.github.torvehammok.ordoeventi.avro.PurchaseStatusAvro"], "default": null}
+  ]
+}

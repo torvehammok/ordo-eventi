@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "GetAvailableGamesQueryAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {"name": "includePrivate", "type": ["null", "boolean"], "default": null},
+    {"name": "maxStake", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null},
+    {"name": "limit", "type": ["null", "int"], "default": null},
+    {"name": "offset", "type": ["null", "int"], "default": null}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "BetAvro",
+  "namespace": "io.github.torvehammok.avro.gaming",
+  "fields": [
+    {"name": "id", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "player1", "type": ["null", "io.github.torvehammok.avro.gaming.PlayerAvro"], "default": null},
+    {"name": "player2", "type": ["null", "io.github.torvehammok.avro.gaming.PlayerAvro"], "default": null},
+    {"name": "stake", "type": ["null", "io.github.torvehammok.avro.common.MoneyAvro"], "default": null}
+  ]
+}

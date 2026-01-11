@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "BooFooAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "boo", "type": ["null", "string"], "avro.java.string": "String", "default": null},
+    {"name": "foo", "type": ["null", "int"], "default": null},
+    {"name": "baz", "type": ["null", "long"], "default": null}
+  ]
+}

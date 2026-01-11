@@ -1,0 +1,13 @@
+{
+  "type": "enum",
+  "name": "GameEndReasonAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "symbols": [
+    "GAME_END_REASON_UNSPECIFIED",
+    "GAME_END_REASON_WIN",
+    "GAME_END_REASON_DRAW",
+    "GAME_END_REASON_FORFEIT",
+    "GAME_END_REASON_TIMEOUT"
+  ]
+}
+

@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "GameStateResponseAvro",
+  "namespace": "io.github.torvehammok.avro.tictactoe",
+  "fields": [
+    {
+      "name": "found",
+      "type": ["null", "boolean"],
+      "default": null
+    },
+    {
+      "name": "gameState",
+      "type": ["null", "io.github.torvehammok.avro.tictactoe.TicTacToeGameStateAvro"],
+      "default": null
+    }
+  ]
+}

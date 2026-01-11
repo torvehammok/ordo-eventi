@@ -1,0 +1,8 @@
+{
+  "type": "record",
+  "name": "CustomerUpdateMessageAvro",
+  "namespace": "io.github.torvehammok.ordoeventi.avro",
+  "fields": [
+    {"name": "msg", "type": ["null", "io.github.torvehammok.ordoeventi.avro.CustomerUpdateAvro"], "default": null}
+  ]
+}

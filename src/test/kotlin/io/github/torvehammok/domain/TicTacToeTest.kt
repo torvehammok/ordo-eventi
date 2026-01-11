@@ -167,7 +167,6 @@ class TicTacToeTest : OrdoEventiTest() {
             refs = listOf(
                 RegistrySchemaRef(
                     subject = "common/Money.proto",
-                    file = "common/Money.proto",
                     version = -1,
                     name = "common/Money.proto"
                 )

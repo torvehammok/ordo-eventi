@@ -86,12 +86,10 @@ class ConfluentSchemaRegistryClient(
                 version = latestSchemaMetadata.version,
                 definition = latestSchemaMetadata.schema,
                 id = latestSchemaMetadata.id,
-                file = null,
                 refs = latestSchemaMetadata.references.map { ref ->
                     RegistrySchemaRef(
                         name = ref.name,
                         subject = ref.subject,
-                        file = null,
                         version = ref.version
                     )
                 }
