@@ -136,7 +136,7 @@ tasks.register<JavaExec>("schemas-tree") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("io.github.torvehammok.OrdoEventiApplicationKt")
     args =
-        listOf("schemas-tree", "-n", "io.github.torvehammok.proto.tictactoe", "-c", "src/main/resources/configmap.yaml")
+        listOf("schemas-tree", "-c", "src/main/resources/configmap.yaml")
 }
 
 tasks.register<JavaExec>("schemas-destroy") {

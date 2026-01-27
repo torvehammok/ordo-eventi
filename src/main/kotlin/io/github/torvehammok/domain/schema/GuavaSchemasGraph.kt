@@ -8,10 +8,21 @@ import com.google.common.graph.Traverser
 
 class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
 
-    override fun traverse(changedSchemas: List<String>): List<SchemaDef> {
+    override fun traversePredecessors(subject: String): List<SchemaDef> {
         val schemas = graph.nodes()
 
-        val changedSchemasNodes = changedSchemas.map { schemas.find { schema -> it == schema.subject } }
+        val changedSchemasNodes = schemas.filter { it.subject == subject }
+
+        return Traverser
+            .forGraph(sortedPredecessorsFn(graph))
+            .depthFirstPostOrder(changedSchemasNodes)
+            .filter { it.subject != subject }
+    }
+
+    override fun traverseSuccessors(subjects: List<String>): List<SchemaDef> {
+        val schemas = graph.nodes()
+
+        val changedSchemasNodes = subjects.map { schemas.find { schema -> it == schema.subject } }
 
         return Traverser
             .forGraph(sortedSuccessorsFn(graph))
@@ -36,7 +47,9 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
 
             Traverser
                 .forGraph(sortedSuccessorsFn(graph))
-                .depthFirstPostOrder(startingPoints).reversed().forEach {
+                .depthFirstPostOrder(startingPoints)
+                .reversed()
+                .forEach {
                     if (it.packageName != namespace) {
                         return@forEach
                     }
@@ -62,7 +75,7 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
         return result
     }
 
-    override fun dependencyGraphItems(): List<SchemaDef> {
+    override fun traverseWholeGraph(): List<SchemaDef> {
         val startingPoints = graph.nodes()
             .filter { graph.predecessors(it).isEmpty() }
             .sortedBy { it.subject }
@@ -73,7 +86,7 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
             .toList()
     }
 
-    override fun findDepsForSubject(subject: String): List<SchemaDef> {
+    override fun findDirectPredecessors(subject: String): List<SchemaDef> {
         val schema = graph.nodes().find { it.subject == subject }!!
         return graph.predecessors(schema).toList()
     }
@@ -86,5 +99,11 @@ class GuavaSchemasGraph(private val graph: Graph<SchemaDef>) : SchemasGraph {
 private fun sortedSuccessorsFn(graph: Graph<SchemaDef>): SuccessorsFunction<SchemaDef> {
     return SuccessorsFunction<SchemaDef> { node ->
         graph.successors(node).sortedBy { it.subject }
+    }
+}
+
+private fun sortedPredecessorsFn(graph: Graph<SchemaDef>): SuccessorsFunction<SchemaDef> {
+    return SuccessorsFunction<SchemaDef> { node ->
+        graph.predecessors(node).sortedBy { it.subject }
     }
 }

@@ -10,6 +10,7 @@ schemaRegistry:
 
 schemaSpecs:
   dir: src/test/proto
+  format: PROTOBUF
   includeOnly:
     - glob: common/**
     - glob: purchases/**

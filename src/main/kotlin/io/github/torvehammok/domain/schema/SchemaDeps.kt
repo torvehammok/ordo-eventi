@@ -5,39 +5,44 @@ package io.github.torvehammok.domain.schema
 import com.google.common.graph.ElementOrder
 import com.google.common.graph.GraphBuilder
 import com.google.common.graph.MutableGraph
+import io.github.torvehammok.cli.SchemasSpecFormat.*
+import io.github.torvehammok.cli.SchemasSpecProps
 import io.github.torvehammok.domain.sandbox.SandboxProps
 import io.github.torvehammok.domain.schema.avro.AvroSchemasDiscoveryStrategy
 import io.github.torvehammok.domain.schema.proto.ProtoSchemasDiscoveryStrategy
 import io.github.torvehammok.domain.schema.registry.RegistrySchemaDiscoveryStrategy
-import java.nio.file.Path
-import java.nio.file.PathMatcher
+import java.nio.file.Paths
 
-class SchemaDeps(private val sandboxProps: SandboxProps) {
+class SchemaDeps(
+    private val sandboxProps: SandboxProps,
+    private val schemasSpecProps: SchemasSpecProps
+) {
 
-    fun resolveSchemaDeps(schemasDir: Path, matcher: PathMatcher = PathMatcher { true }): SchemasGraph {
-        val strategy = ProtoSchemasDiscoveryStrategy(sandboxProps, schemasDir)
+    fun resolveSchemaDeps(): SchemasGraph {
+        val schemasDir = Paths.get(schemasSpecProps.dir)
 
-        return discoverSchemasWithStrategy(strategy, matcher)
-    }
+        val strategy = when (schemasSpecProps.format) {
+            AVRO -> AvroSchemasDiscoveryStrategy(sandboxProps, schemasDir)
+            PROTOBUF -> ProtoSchemasDiscoveryStrategy(sandboxProps, schemasDir)
+        }
 
-    fun resolveAvroSchemaDeps(schemasDir: Path, matcher: PathMatcher = PathMatcher { true }): SchemasGraph {
-        val strategy = AvroSchemasDiscoveryStrategy(sandboxProps, schemasDir)
-
-        return discoverSchemasWithStrategy(strategy, matcher)
+        return discoverSchemasWithStrategy(strategy)
     }
 
     fun resolveSchemaDeps(schemas: List<RegistrySchema>): SchemasGraph {
         val strategy = RegistrySchemaDiscoveryStrategy(schemas)
 
-        return discoverSchemasWithStrategy(strategy) { true }
+        return discoverSchemasWithStrategy(strategy)
     }
 
 }
 
-private fun discoverSchemasWithStrategy(strategy: SchemasDiscoveryStrategy, matcher: PathMatcher): SchemasGraph {
+private fun discoverSchemasWithStrategy(strategy: SchemasDiscoveryStrategy): SchemasGraph {
     val graph = createDependenciesGraph()
 
-    strategy.discoverSchemas(matcher).forEach { discoveredSchema ->
+    val discoveredSchemas = strategy.discoverSchemas()
+
+    discoveredSchemas.forEach { discoveredSchema ->
         graph.addNode(discoveredSchema.def)
 
         for (ref in discoveredSchema.refs) {

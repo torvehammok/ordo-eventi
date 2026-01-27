@@ -4,17 +4,18 @@ interface SchemasGraph {
 
     fun listNamespaces(namespace: String? = null): List<NamespaceSchemas>
 
-    fun dependencyGraphItems(): List<SchemaDef>
+    fun traverseWholeGraph(): List<SchemaDef>
 
-    fun findDepsForSubject(subject: String): List<SchemaDef>
+    fun findDirectPredecessors(subject: String): List<SchemaDef>
 
     fun allSchemas(): Set<SchemaDef>
 
-    fun traverse(changedSchemas: List<String>): List<SchemaDef>
+    fun traversePredecessors(subject: String): List<SchemaDef>
 
+    fun traverseSuccessors(subjects: List<String>): List<SchemaDef>
 }
 
-data class SchemaDef(val subject: String, val filename: String, val packageName: String)
+data class SchemaDef(val subject: String, val filename: String, val packageName: String, val name: String)
 
 data class NamespaceSchemas(val namespace: String, val schemas: List<Item>) {
 

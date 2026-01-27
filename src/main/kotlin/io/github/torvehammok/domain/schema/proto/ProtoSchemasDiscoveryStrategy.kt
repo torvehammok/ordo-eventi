@@ -9,14 +9,13 @@ import io.github.torvehammok.domain.schema.SchemasDiscoveryStrategy
 import io.github.torvehammok.domain.schema.toSubjectName
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.PathMatcher
 
 class ProtoSchemasDiscoveryStrategy(
     private val sandboxProps: SandboxProps,
     private val schemasDir: Path
 ) : SchemasDiscoveryStrategy {
 
-    override fun discoverSchemas(pathMatcher: PathMatcher): List<DiscoveredSchema> {
+    override fun discoverSchemas(): List<DiscoveredSchema> {
         val discoveredSchemas = mutableListOf<DiscoveredSchema>()
 
         Files.walk(schemasDir).use { paths ->
@@ -26,10 +25,6 @@ class ProtoSchemasDiscoveryStrategy(
                 }
 
                 val relativeProtoFile = schemasDir.relativize(path)
-
-                if (!pathMatcher.matches(relativeProtoFile)) {
-                    continue
-                }
 
                 val protobufSchema = ProtobufSchema(Files.readString(path))
                 val protoFile = protobufSchema.rawSchema()
@@ -41,7 +36,8 @@ class ProtoSchemasDiscoveryStrategy(
                 val schemaDef = SchemaDef(
                     subject = toSubjectName(relativeProtoFile.toString(), sandboxProps),
                     filename = relativeProtoFile.toString(),
-                    packageName = packageName
+                    packageName = packageName,
+                    name = relativeProtoFile.toString()
                 )
 
                 val refs = allImports.map { importDef ->
@@ -57,6 +53,7 @@ class ProtoSchemasDiscoveryStrategy(
                     SchemaDef(
                         subject = toSubjectName(importDef, sandboxProps),
                         filename = importDef,
+                        name = importDef,
                         packageName = importedSchema.rawSchema().packageName ?: "default"
                     )
                 }

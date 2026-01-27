@@ -1,14 +1,22 @@
 package io.github.torvehammok.infra.confluent
 
+import io.confluent.kafka.schemaregistry.ParsedSchema
+import io.confluent.kafka.schemaregistry.avro.AvroSchema
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient
 import io.confluent.kafka.schemaregistry.client.rest.entities.SchemaReference
 import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema
+import io.github.torvehammok.cli.SchemasSpecFormat.AVRO
+import io.github.torvehammok.cli.SchemasSpecFormat.PROTOBUF
 import io.github.torvehammok.cli.SchemasSpecProps
 import io.github.torvehammok.domain.sandbox.SandboxProps
 import io.github.torvehammok.domain.schema.RegistryClient
 import io.github.torvehammok.domain.schema.RegistrySchema
 import io.github.torvehammok.domain.schema.RegistrySchemaRef
+import io.github.torvehammok.domain.schema.SchemaDef
 import org.slf4j.LoggerFactory
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 private val log = LoggerFactory.getLogger(ConfluentSchemaRegistryClient::class.java)
 
@@ -21,11 +29,18 @@ class ConfluentSchemaRegistryClient(
     override fun updateSchema(
         subject: String,
         schemaDefinition: String,
-        refs: List<RegistrySchemaRef>,
-        minVersion: Int
+        directReferences: List<RegistrySchemaRef>,
+        minVersion: Int,
+        allReferences: List<SchemaDef>,
     ): Int {
-        val schemaRefs = refs.map { ref -> SchemaReference(ref.name, ref.subject, ref.version) }
-        val schema = ProtobufSchema(schemaDefinition, schemaRefs, emptyMap(), null, subject)
+        val schemaRefs = directReferences
+            .map { ref -> SchemaReference(ref.name, ref.subject, ref.version) }
+
+        val schema = toParsedSchema(
+            schemaDefinition = schemaDefinition,
+            directReferences = schemaRefs,
+            allReferences = allReferences
+        )
 
         val response = client.registerWithResponse(subject, schema, false, false)
 
@@ -50,24 +65,18 @@ class ConfluentSchemaRegistryClient(
         client.deleteSubject(subject, false)
     }
 
-    override fun deleteAllSchemas() {
-        for (i in 1..10) {
-            val allSubjects = client.getAllSubjects(false)
-            if (allSubjects.isEmpty()) {
-                log.info("All schema subjects deleted.")
-                return
-            }
+    override fun normalizeSchemaDef(schema: SchemaDef, refs: List<SchemaDef>): String {
+        val file = toSchemaFile(schema)
 
-            for (subject in allSubjects) {
-                log.info("Deleting schema subject: $subject")
-                try {
-                    client.deleteSubject(subject, false)
-                } catch (e: Exception) {
-                    log.debug("Failed to delete schema subject: $subject. {}", e.message)
-                }
-            }
-        }
+        val rawSchema = Files.readString(file)
 
+        val parsedSchema = toParsedSchema(
+            schemaDefinition = rawSchema,
+            directReferences = emptyList(), // Direct references are not needed for normalization
+            allReferences = refs
+        )
+
+        return parsedSchema.canonicalString()
     }
 
     override fun listSchemas(): List<RegistrySchema> {
@@ -99,5 +108,29 @@ class ConfluentSchemaRegistryClient(
         }
 
         return schemas
+    }
+
+    private fun toParsedSchema(
+        schemaDefinition: String,
+        directReferences: List<SchemaReference>,
+        allReferences: List<SchemaDef>
+    ): ParsedSchema {
+        return when (schemasSpecProps.format) {
+            AVRO -> {
+                val resolvedRefs = allReferences.associate {
+                    val file = toSchemaFile(it)
+                    val rawSchema = Files.readString(file)
+                    it.name to rawSchema
+                }
+
+                AvroSchema(schemaDefinition, directReferences, resolvedRefs, null)
+            }
+
+            PROTOBUF -> ProtobufSchema(schemaDefinition, directReferences, emptyMap(), null, null)
+        }
+    }
+
+    private fun toSchemaFile(def: SchemaDef): Path {
+        return Paths.get(schemasSpecProps.dir).resolve(def.filename)
     }
 }

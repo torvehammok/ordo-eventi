@@ -7,13 +7,14 @@ interface RegistryClient {
     fun updateSchema(
         subject: String,
         schemaDefinition: String,
-        refs: List<RegistrySchemaRef> = emptyList(),
-        minVersion: Int = -1
+        directReferences: List<RegistrySchemaRef> = emptyList(),
+        minVersion: Int = -1,
+        allReferences : List<SchemaDef> = emptyList()
     ): Int
 
     fun deleteSchema(subject: String)
 
-    fun deleteAllSchemas()
+    fun normalizeSchemaDef(schema: SchemaDef, refs: List<SchemaDef>): String
 }
 
 data class RegistrySchema(

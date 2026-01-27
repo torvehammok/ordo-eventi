@@ -7,10 +7,12 @@ import io.github.torvehammok.domain.schema.DiscoveredSchema
 import io.github.torvehammok.domain.schema.SchemaDef
 import io.github.torvehammok.domain.schema.SchemasDiscoveryStrategy
 import io.github.torvehammok.domain.schema.toSubjectName
+import org.slf4j.LoggerFactory
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.PathMatcher
 import java.util.stream.Collectors
+
+private val log = LoggerFactory.getLogger(AvroSchemasDiscoveryStrategy::class.java)
 
 class AvroSchemasDiscoveryStrategy(
     private val sandboxProps: SandboxProps,
@@ -19,7 +21,7 @@ class AvroSchemasDiscoveryStrategy(
 
     private val objectMapper = ObjectMapper()
 
-    override fun discoverSchemas(pathMatcher: PathMatcher): List<DiscoveredSchema> {
+    override fun discoverSchemas(): List<DiscoveredSchema> {
         val discoveredSchemas = mutableListOf<DiscoveredSchema>()
 
         val typesIndex = indexFilesByDeclaredType(schemasDir, objectMapper)
@@ -31,10 +33,6 @@ class AvroSchemasDiscoveryStrategy(
                 }
 
                 val relativeFile = schemasDir.relativize(schemaFile)
-
-                if (!pathMatcher.matches(relativeFile)) {
-                    continue
-                }
 
                 val schemaJson = objectMapper.readTree(Files.readString(schemaFile))
                 val declaredAvroType = toTypeName(schemaJson, relativeFile)
@@ -55,6 +53,7 @@ class AvroSchemasDiscoveryStrategy(
                         SchemaDef(
                             subject = toSubjectName(relativeDependencyFile.toString(), sandboxProps),
                             filename = relativeDependencyFile.toString(),
+                            name = avroType.toString(),
                             packageName = avroType.namespace ?: "default"
                         )
                     }
@@ -65,6 +64,7 @@ class AvroSchemasDiscoveryStrategy(
                         def = SchemaDef(
                             subject = toSubjectName(relativeFile.toString(), sandboxProps),
                             filename = relativeFile.toString(),
+                            name = declaredAvroType.toString(),
                             packageName = declaredAvroType.namespace ?: "default"
                         ),
                         refs = dependentSchemaDefs
@@ -98,7 +98,7 @@ private fun findDependentTypeNames(
         if (typesIndex.containsKey(qualifiedTypeName)) {
             dependentTypes.add(qualifiedTypeName)
         } else {
-            println("Warning: Cannot find declared type $qualifiedTypeName for schema")
+            log.warn("Warning: Cannot find declared type {} for schema", qualifiedTypeName)
         }
     }
 

@@ -35,36 +35,6 @@
         "int"
       ],
       "default": null
-    },
-    {
-      "name": "timestamp",
-      "type": [
-        "null",
-        {
-          "type": "record",
-          "name": "TimestampAvro",
-          "namespace": "google.protobuf",
-          "fields": [
-            {
-              "name": "seconds",
-              "type": [
-                "null",
-                "long"
-              ],
-              "default": null
-            },
-            {
-              "name": "nanos",
-              "type": [
-                "null",
-                "int"
-              ],
-              "default": null
-            }
-          ]
-        }
-      ],
-      "default": null
     }
   ]
 }

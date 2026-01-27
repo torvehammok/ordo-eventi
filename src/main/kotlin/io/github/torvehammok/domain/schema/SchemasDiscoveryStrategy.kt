@@ -1,9 +1,7 @@
 package io.github.torvehammok.domain.schema
 
-import java.nio.file.PathMatcher
-
 interface SchemasDiscoveryStrategy {
-    fun discoverSchemas(pathMatcher: PathMatcher): List<DiscoveredSchema>
+    fun discoverSchemas(): List<DiscoveredSchema>
 }
 
 data class DiscoveredSchema(
