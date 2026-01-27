@@ -23,7 +23,8 @@ class ProtoSchemasDiscoveryStrategyTest {
         val matcher = FileSystems.getDefault().getPathMatcher("glob:common/**")
 
         // when
-        val schemas = strategy.discoverSchemas(matcher)
+        val schemas = strategy.discoverSchemas()
+            .filter { matcher.matches(Paths.get(it.def.filename)) }
 
         // then
 
@@ -53,7 +54,8 @@ class ProtoSchemasDiscoveryStrategyTest {
         val matcher = FileSystems.getDefault().getPathMatcher("glob:gaming-common/**")
 
         // when
-        val schemas = strategy.discoverSchemas(matcher)
+        val schemas = strategy.discoverSchemas()
+            .filter { matcher.matches(Paths.get(it.def.filename)) }
 
         // then
         assertThat(schemas)
@@ -74,10 +76,8 @@ class ProtoSchemasDiscoveryStrategyTest {
         val sandboxProps = SandboxProps()
         val strategy = ProtoSchemasDiscoveryStrategy(sandboxProps, Paths.get("avro"))
 
-        val matcher = FileSystems.getDefault().getPathMatcher("glob:common/**")
-
         // when
-        val schemas = strategy.discoverSchemas(matcher)
+        val schemas = strategy.discoverSchemas()
 
         // then
         assertThat(schemas).isEmpty()

@@ -1,11 +1,11 @@
 package io.github.torvehammok.domain.schema.avro
 
 import io.github.torvehammok.domain.sandbox.SandboxProps
-import io.github.torvehammok.domain.schema.avro.AvroSchemasDiscoveryStrategy
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.tuple
 import org.junit.jupiter.api.Test
 import java.nio.file.FileSystems
+import java.nio.file.Path
 import java.nio.file.Paths
 
 class AvroSchemasDiscoveryStrategyTest {
@@ -22,7 +22,8 @@ class AvroSchemasDiscoveryStrategyTest {
         val matcher = FileSystems.getDefault().getPathMatcher("glob:common/**")
 
         // when
-        val schemas = strategy.discoverSchemas(matcher)
+        val schemas = strategy.discoverSchemas()
+            .filter { matcher.matches(Path.of(it.def.filename)) }
 
         // then
         assertThat(schemas)
@@ -56,7 +57,8 @@ class AvroSchemasDiscoveryStrategyTest {
         val matcher = FileSystems.getDefault().getPathMatcher("glob:gaming-common/**")
 
         // when
-        val schemas = strategy.discoverSchemas(matcher)
+        val schemas = strategy.discoverSchemas()
+            .filter { matcher.matches(Path.of(it.def.filename)) }
 
         // then
         assertThat(schemas)
@@ -79,7 +81,7 @@ class AvroSchemasDiscoveryStrategyTest {
 
 
         // when
-        val schemas = strategy.discoverSchemas { true }
+        val schemas = strategy.discoverSchemas()
 
         // then
         assertThat(schemas).isEmpty()

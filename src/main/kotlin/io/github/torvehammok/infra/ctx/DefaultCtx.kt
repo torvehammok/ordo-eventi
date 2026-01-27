@@ -66,7 +66,7 @@ class DefaultCtx(val configmap: Configmap) : Ctx {
         topicOps = TopicOps(topicsSpecProps, adminClientsPool, sandboxProps)
         topicService = TopicService(topicOps)
 
-        val schemaDeps = SchemaDeps(sandboxProps)
+        val schemaDeps = SchemaDeps(sandboxProps, schemasSpecProps)
         schemaService = SchemaService(registryClient, schemasSpecProps, schemaDeps)
 
         instances[TopicService::class.java] = topicService

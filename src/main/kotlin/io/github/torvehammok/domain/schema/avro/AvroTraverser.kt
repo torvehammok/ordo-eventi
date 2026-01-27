@@ -17,6 +17,9 @@ internal fun traverseAvroJson(avroJson: JsonNode, currentField: String = "", onT
     } else if (currentField == "values" && avroJson.isTextual) {
         val typeName = avroJson.asText()
         onTypeDetectedInternal(typeName, avroJson)
+    } else if (currentField == "items" && avroJson.isTextual) {
+        val typeName = avroJson.asText()
+        onTypeDetectedInternal(typeName, avroJson)
     } else if (currentField == "type" && avroJson.isObject && avroJson.has("name")) {
         val typeName = avroJson.get("name").asText()
         onTypeDetectedInternal(typeName, avroJson)

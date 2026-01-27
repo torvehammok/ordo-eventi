@@ -4,7 +4,6 @@ import de.danielbechler.diff.ObjectDiffer
 import de.danielbechler.diff.ObjectDifferBuilder
 import de.danielbechler.diff.identity.EqualsIdentityStrategy
 import de.danielbechler.diff.node.DiffNode.State.*
-import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchema
 import io.github.torvehammok.cli.SchemasSpecProps
 import io.github.torvehammok.domain.sandbox.SandboxProps
 import org.slf4j.LoggerFactory
@@ -30,7 +29,7 @@ class SchemaService(
         val allSchemas = registryClient.listSchemas()
         val depsGraph = schemaDeps.resolveSchemaDeps(allSchemas)
 
-        depsGraph.dependencyGraphItems().forEach {
+        depsGraph.traverseWholeGraph().forEach {
             log.info("Deleting schema: ${it.subject}")
             // Deletion not supported in this example
             registryClient.deleteSchema(it.subject)
@@ -39,39 +38,53 @@ class SchemaService(
 
     fun planSchemaUpdates(inclusionGlobs: List<String>? = null): SchemaUpdatePlan {
         log.info("Planning schema updates...")
-        val dir = Paths.get(schemasSpecProps.dir)
 
-        val depsGraph = schemaDeps.resolveSchemaDeps(
-            schemasDir = dir,
-            matcher = inclusionGlobMatcher(inclusionGlobs)
-        )
+        val depsGraph = schemaDeps.resolveSchemaDeps()
 
         val currentSchemas = registryClient.listSchemas()
-        val expectedSchemas = toExpectedSchemas(depsGraph, dir, currentSchemas)
+        val inclusionGlobMatcher = inclusionGlobMatcher(inclusionGlobs)
 
-        val plan = calcSchemaUpdatesPlan(expectedSchemas, currentSchemas, depsGraph)
+        val expectedSchemas = toExpectedSchemas(
+            depsGraph = depsGraph,
+            currentSchemas = currentSchemas,
+            inclusionFilter = inclusionGlobMatcher
+        )
+
+        val plan = calcSchemaUpdatesPlan(
+            expectedSchemas = expectedSchemas,
+            currentSchemas = currentSchemas,
+            depsGraph = depsGraph,
+            matcher = inclusionGlobMatcher
+        )
 
         log.info("Schema updates plan:\n{}", SchemaUpdatePlanPrinter().print(plan))
         return plan
     }
 
     fun listSchemasNamespaces(namespace: String? = null): List<NamespaceSchemas> {
-        val depsGraph = schemaDeps.resolveSchemaDeps(Paths.get(schemasSpecProps.dir))
+        val depsGraph = schemaDeps.resolveSchemaDeps()
         return depsGraph.listNamespaces(namespace = namespace)
     }
 
     fun applySchemaUpdates(inclusionGlobs: List<String>? = null): SchemaUpdatePlan {
         log.info("Planning schema updates...")
-        val dir = Paths.get(schemasSpecProps.dir)
-        val depsGraph = schemaDeps.resolveSchemaDeps(
-            schemasDir = dir,
-            matcher = inclusionGlobMatcher(inclusionGlobs)
-        )
+        val depsGraph = schemaDeps.resolveSchemaDeps()
         val currentSchemas = registryClient.listSchemas()
 
-        val expectedSchemas = toExpectedSchemas(depsGraph, dir, currentSchemas)
+        val inclusionGlobMatcher = inclusionGlobMatcher(inclusionGlobs)
 
-        val plan = calcSchemaUpdatesPlan(expectedSchemas, currentSchemas, depsGraph)
+        val expectedSchemas = toExpectedSchemas(
+            depsGraph = depsGraph,
+            currentSchemas = currentSchemas,
+            inclusionFilter = inclusionGlobMatcher
+        )
+
+        val plan = calcSchemaUpdatesPlan(
+            expectedSchemas = expectedSchemas,
+            currentSchemas = currentSchemas,
+            depsGraph = depsGraph,
+            matcher = inclusionGlobMatcher
+        )
 
         log.info("Schema updates plan:\n{}", SchemaUpdatePlanPrinter().print(plan))
 
@@ -88,7 +101,8 @@ class SchemaService(
     private fun calcSchemaUpdatesPlan(
         expectedSchemas: List<RegistrySchema>,
         currentSchemas: List<RegistrySchema>,
-        depsGraph: SchemasGraph
+        depsGraph: SchemasGraph,
+        matcher: PathMatcher = PathMatcher { true }
     ): SchemaUpdatePlan {
         val differ = schemasDiffer()
         val ops = mutableListOf<SchemaOp>()
@@ -120,38 +134,42 @@ class SchemaService(
             }
         }
 
-        return SchemaUpdatePlan(ops, depsGraph)
+        return SchemaUpdatePlan(ops, depsGraph, matcher)
     }
 
     private fun toExpectedSchemas(
         depsGraph: SchemasGraph,
-        dir: Path,
-        currentSchemas: List<RegistrySchema>
+        currentSchemas: List<RegistrySchema>,
+        inclusionFilter: PathMatcher
     ): List<RegistrySchema> {
         val schemaDefinitions = depsGraph.allSchemas()
 
-        val expectedSchemas = schemaDefinitions.map {
-            val protobufSchema = ProtobufSchema(Files.readString(dir.resolve(it.filename)))
-            val deps = depsGraph.findDepsForSubject(it.subject)
+        val expectedSchemas = schemaDefinitions
+            .filter { inclusionFilter.matches(Paths.get(it.filename)) }
+            .map {
+                val deps = depsGraph.findDirectPredecessors(it.subject)
 
-            val refs = deps.map { ref ->
-                val refSchema = currentSchemas.find { s -> s.subject == ref.subject }
+                val refs = deps.map { ref ->
+                    val refSchema = currentSchemas.find { s -> s.subject == ref.subject }
 
-                RegistrySchemaRef(
-                    name = ref.filename,
-                    subject = ref.subject,
-                    version = refSchema?.version ?: -1,
+                    RegistrySchemaRef(
+                        name = ref.name,
+                        subject = ref.subject,
+                        version = refSchema?.version ?: -1,
+                    )
+                }
+
+                val predecessors = depsGraph.traversePredecessors(it.subject)
+                val normalizedSchema = registryClient.normalizeSchemaDef(it, predecessors)
+
+                RegistrySchema(
+                    id = -1,
+                    subject = it.subject,
+                    version = 0,
+                    definition = normalizedSchema,
+                    refs = refs
                 )
             }
-
-            RegistrySchema(
-                id = -1,
-                subject = it.subject,
-                version = 0,
-                definition = protobufSchema.canonicalString(),
-                refs = refs
-            )
-        }
 
         return expectedSchemas
     }
@@ -170,7 +188,8 @@ class SchemaService(
                 val nextVersion = registryClient.updateSchema(
                     subject = schema.subject,
                     schemaDefinition = op.schema.definition,
-                    refs = toLatestSchemaRefs(op.schema.refs, currentSchemas)
+                    directReferences = toLatestSchemaRefs(op.schema.refs, currentSchemas),
+                    allReferences = plan.depsGraph.traversePredecessors(op.schema.subject)
                 )
                 updateSubjectVersion(schema.subject, nextVersion)
 
@@ -181,10 +200,12 @@ class SchemaService(
 
                 ADDED -> {
                     log.info("+ Creating schema '${op.schema.subject}")
+
                     val nextVersion = registryClient.updateSchema(
                         subject = op.schema.subject,
                         schemaDefinition = op.schema.definition,
-                        refs = toLatestSchemaRefs(op.schema.refs, currentSchemas)
+                        directReferences = toLatestSchemaRefs(op.schema.refs, currentSchemas),
+                        allReferences = plan.depsGraph.traversePredecessors(op.schema.subject)
                     )
                     updateSubjectVersion(op.schema.subject, nextVersion)
                 }
@@ -198,11 +219,13 @@ class SchemaService(
                     log.info("~ Updating schema '${op.schema.subject}' $line")
 
                     val currentDef = currentSchemas.find { it.subject == op.schema.subject }!!
+
                     val nextVersion = registryClient.updateSchema(
                         subject = op.schema.subject,
                         schemaDefinition = op.schema.definition,
-                        refs = toLatestSchemaRefs(op.schema.refs, currentSchemas),
-                        minVersion = currentDef.version
+                        directReferences = toLatestSchemaRefs(op.schema.refs, currentSchemas),
+                        minVersion = currentDef.version,
+                        allReferences = plan.depsGraph.traversePredecessors(op.schema.subject)
                     )
                     updateSubjectVersion(op.schema.subject, nextVersion)
                 }
@@ -234,11 +257,9 @@ private fun toLatestSchemaRefs(
 fun toSubjectName(fileName: String, sandboxProps: SandboxProps): String {
     val schemaName = if (fileName.endsWith("-value.proto") || fileName.endsWith("-key.proto")) {
         Paths.get(fileName).fileName.toString().removeSuffix(".proto")
-    }
-    else if (fileName.endsWith("-value.avsc") || fileName.endsWith("-key.avsc")) {
+    } else if (fileName.endsWith("-value.avsc") || fileName.endsWith("-key.avsc")) {
         Paths.get(fileName).fileName.toString().removeSuffix(".avsc")
-    }
-    else {
+    } else {
         fileName
     }
 

@@ -5,20 +5,18 @@
   "fields": [
     {
       "name": "createdAt",
-      "type": ["null", {
-        "type": "record",
-        "name": "TimestampAvro",
-        "namespace": "google.protobuf",
-        "fields": [
-          {"name": "seconds", "type": ["null", "long"], "default": null},
-          {"name": "nanos", "type": ["null", "int"], "default": null}
-        ]
-      }],
-      "default": null
+      "type": [
+        "null",
+        "string"
+      ],
+      "avro.java.string": "String"
     },
     {
       "name": "purchase",
-      "type": ["null", "io.github.torvehammok.ordoeventi.avro.PurchaseAvro"],
+      "type": [
+        "null",
+        "io.github.torvehammok.ordoeventi.avro.PurchaseAvro"
+      ],
       "default": null
     }
   ]

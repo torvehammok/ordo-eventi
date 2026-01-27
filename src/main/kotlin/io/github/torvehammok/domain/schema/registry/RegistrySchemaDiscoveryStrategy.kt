@@ -4,17 +4,17 @@ import io.github.torvehammok.domain.schema.DiscoveredSchema
 import io.github.torvehammok.domain.schema.RegistrySchema
 import io.github.torvehammok.domain.schema.SchemaDef
 import io.github.torvehammok.domain.schema.SchemasDiscoveryStrategy
-import java.nio.file.PathMatcher
 
 class RegistrySchemaDiscoveryStrategy(private val schemas: List<RegistrySchema>) : SchemasDiscoveryStrategy {
 
-    override fun discoverSchemas(pathMatcher: PathMatcher): List<DiscoveredSchema> {
+    override fun discoverSchemas(): List<DiscoveredSchema> {
         val discoveredSchemas = mutableListOf<DiscoveredSchema>()
 
         for (schema in schemas) {
             val def = SchemaDef(
                 subject = schema.subject,
                 filename = schema.subject,
+                name = schema.subject,
                 packageName = "default"
             )
 
@@ -25,6 +25,7 @@ class RegistrySchemaDiscoveryStrategy(private val schemas: List<RegistrySchema>)
                 SchemaDef(
                     subject = refSchema.subject,
                     filename = ref.name,
+                    name = ref.name,
                     packageName = "default"
                 )
             }

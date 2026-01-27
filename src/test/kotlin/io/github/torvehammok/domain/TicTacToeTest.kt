@@ -164,7 +164,7 @@ class TicTacToeTest : OrdoEventiTest() {
                   string id = 1;
                 }
             """.trimIndent(),
-            refs = listOf(
+            directReferences = listOf(
                 RegistrySchemaRef(
                     subject = "common/Money.proto",
                     version = -1,

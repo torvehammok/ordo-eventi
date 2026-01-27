@@ -1,24 +1,25 @@
 $schema: "./configmap.schema.yaml"
 kafkaAdmin:
   config:
-    bootstrap.servers: pkc-zm3p0.eu-north-1.aws.confluent.cloud:9092
+    bootstrap.servers: localhost:9092
     # add confluent sasl config
-    security.protocol: SASL_SSL
-    sasl.mechanism: PLAIN
-    sasl.jaas.config: $env:CC_KAFKA_JAAS_CONFIG
+#    security.protocol: SASL_SSL
+#    sasl.mechanism: PLAIN
+#    sasl.jaas.config: $env:CC_KAFKA_JAAS_CONFIG
 
 schemaRegistry:
-  baseUrl: https://psrc-12d08v.eu-north-1.aws.confluent.cloud
-  config:
-    basic.auth.user.info: $env:CC_SCHEMA_REGISTRY_AUTH
-    basic.auth.credentials.source: USER_INFO
+  baseUrl: http://localhost:8081
+#  config:
+#    basic.auth.user.info: $env:CC_SCHEMA_REGISTRY_AUTH
+#    basic.auth.credentials.source: USER_INFO
 
 sandbox:
   enabled: true
   prefix: dev-
 
 schemaSpecs:
-  dir: src/main/proto
+  dir: src/test/proto
+  format: PROTOBUF
   includeOnly:
     - glob: common/**
     #    - glob: purchases/**

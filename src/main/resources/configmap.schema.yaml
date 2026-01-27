@@ -32,6 +32,11 @@ properties:
       dir:
         description: "Directory containing schema files"
         type: string
+      format:
+        description: "Schema file format"
+        type: string
+        enum: [ 'PROTOBUF', 'AVRO' ]
+        default: "AVRO"
       includeOnly:
         type: array
         description: "List of glob patterns to include only specific schema files. Empty or omitted means include all."
