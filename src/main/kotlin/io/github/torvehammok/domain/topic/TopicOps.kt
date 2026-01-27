@@ -125,35 +125,6 @@ class TopicOps(
         return TopicUpdatePlan(diffs)
     }
 
-    private fun toTopicUpdate(diff: TopicDiff): List<AlterConfigOp> {
-        val ops = mutableListOf<AlterConfigOp>()
-        diff.diffNode.getChild("configOverrides").visitChildren { childNode, _ ->
-            val key = childNode.path.lastElementSelector.toHumanReadableString()
-                .replace("{", "")
-                .replace("}", "")
-
-            when (childNode.state) {
-                ADDED, CHANGED -> {
-                    val value = childNode.canonicalGet(diff.expected) as String
-                    ops.add(AlterConfigOp(ConfigEntry(key, value), SET))
-                }
-
-                REMOVED -> {
-                    val key = childNode.path.lastElementSelector.toHumanReadableString()
-                        .replace("{", "")
-                        .replace("}", "")
-                    ops.add(AlterConfigOp(ConfigEntry(key, null), AlterConfigOp.OpType.DELETE))
-                }
-
-                else -> {
-                    // do nothing
-                }
-            }
-        }
-
-        return ops
-    }
-
     private fun findCurrentTopicSpecs(): List<TopicSpecProps> {
         return adminClientsPool.withAdminClient { adminClient ->
             val topics = adminClient
@@ -193,6 +164,35 @@ class TopicOps(
     }
 }
 
+private fun toTopicUpdate(diff: TopicDiff): List<AlterConfigOp> {
+    val ops = mutableListOf<AlterConfigOp>()
+    diff.diffNode.getChild("configOverrides").visitChildren { childNode, _ ->
+        val key = childNode.path.lastElementSelector.toHumanReadableString()
+            .replace("{", "")
+            .replace("}", "")
+
+        when (childNode.state) {
+            ADDED, CHANGED -> {
+                val value = childNode.canonicalGet(diff.expected) as String
+                ops.add(AlterConfigOp(ConfigEntry(key, value), SET))
+            }
+
+            REMOVED -> {
+                val key = childNode.path.lastElementSelector.toHumanReadableString()
+                    .replace("{", "")
+                    .replace("}", "")
+                ops.add(AlterConfigOp(ConfigEntry(key, null), AlterConfigOp.OpType.DELETE))
+            }
+
+            else -> {
+                // do nothing
+            }
+        }
+    }
+
+    return ops
+}
+
 private fun createObjectDiffer(): ObjectDiffer {
     return ObjectDifferBuilder.startBuilding()
         .filtering()
@@ -207,9 +207,5 @@ private fun createObjectDiffer(): ObjectDiffer {
 }
 
 private fun toTopicName(topicName: String, sandboxProps: SandboxProps): String {
-    return if (sandboxProps.enabled) {
-        sandboxProps.prefix + topicName
-    } else {
-        topicName
-    }
+    return if (sandboxProps.enabled) sandboxProps.prefix + topicName else topicName
 }

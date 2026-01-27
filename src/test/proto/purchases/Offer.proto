@@ -12,4 +12,5 @@ message OfferProto {
   io.github.torvehammok.proto.common.MoneyProto price = 3;
   string productCode = 4;
   io.github.torvehammok.ordoeventi.proto.PurchaseStatusProto status = 5;
+  reserved 19;
 }

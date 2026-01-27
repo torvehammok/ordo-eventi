@@ -258,8 +258,6 @@ private fun schemasDiffer(): ObjectDiffer {
         .exclude()
         .propertyNameOfType(RegistrySchema::class.java, "id")
         .propertyNameOfType(RegistrySchema::class.java, "version")
-        .propertyNameOfType(RegistrySchema::class.java, "file")
-        .propertyNameOfType(RegistrySchemaRef::class.java, "file")
         .and()
         .identity()
         .setDefaultCollectionItemIdentityStrategy { a, b ->
