@@ -11,5 +11,6 @@
     <logger name="io.github.torvehammok" level="debug"/>
 
     <logger name="org.apache.kafka.common.config" level="warn"/>
+    <logger name="org.apache.kafka.common.metrics" level="warn"/>
     <logger name="org.apache.kafka.clients.admin" level="warn"/>
 </configuration>
