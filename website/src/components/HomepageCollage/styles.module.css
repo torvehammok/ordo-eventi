@@ -1,0 +1,49 @@
+.sliderContainer {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+  padding: 0;
+  background-color: var(--ifm-color-secondary-lightest);
+}
+
+[data-theme='dark'] .sliderContainer {
+  background-color: var(--ifm-color-secondary-darkest);
+}
+
+.sliderTrack {
+  display: flex;
+  width: max-content;
+  animation: scroll 60s linear infinite;
+}
+
+/* Pause animation on hover for better UX */
+.sliderTrack:hover {
+  animation-play-state: paused;
+}
+
+.slide {
+  height: 300px; /* Fixed height for uniformity */
+  flex-shrink: 0;
+  margin: 0; /* No spaces between images */
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.image {
+  height: 100%;
+  width: auto; /* Maintain aspect ratio */
+  display: block;
+  object-fit: cover;
+  /* Optional: subtle separator or border? User asked to skip spaces, so likely flush. */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Move by half the total width (the length of one original set) */
+  }
+}

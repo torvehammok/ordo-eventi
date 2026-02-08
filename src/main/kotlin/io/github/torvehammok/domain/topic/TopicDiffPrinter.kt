@@ -29,7 +29,7 @@ class TopicDiffPrinter {
             builder.append("# Topic '${diff.expected?.name}' is in sync\n")
         }
 
-        if (unchanged.isNotEmpty()) {
+        if (added.isNotEmpty() || changed.isNotEmpty() || removed.isNotEmpty()) {
             builder.append("\n")
         }
 

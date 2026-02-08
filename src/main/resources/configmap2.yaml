@@ -14,7 +14,7 @@ schemaRegistry:
     basic.auth.credentials.source: USER_INFO
 
 sandbox:
-  enabled: false
+  enabled: true
   prefix: dev-
 
 schemaSpecs:
@@ -44,15 +44,9 @@ topicSpecs:
     #    - name: private.topic-1
     #    - name: private.topic-2
     - name: tictactoe.game-abandoned
-      deleteTopic: true
     - name: tictactoe.game-created
-      deleteTopic: true
     - name: tictactoe.game-finished
-      deleteTopic: true
     - name: tictactoe.game-snapshot
-      deleteTopic: true
     - name: tictactoe.move-made
-      deleteTopic: true
     - name: tictactoe.player-joined
-      deleteTopic: true
 #    - name: private.topic-3

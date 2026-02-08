@@ -5,20 +5,29 @@ import io.confluent.kafka.schemaregistry.protobuf.ProtobufSchemaProvider
 import io.github.torvehammok.Configmap
 import io.github.torvehammok.Ctx
 import io.github.torvehammok.cli.SchemaRegistryProps
+import io.github.torvehammok.cli.SchemasSpecFormat
+import io.github.torvehammok.cli.SchemasSpecFormat.AVRO
+import io.github.torvehammok.cli.SchemasSpecFormat.PROTOBUF
 import io.github.torvehammok.cli.SchemasSpecProps
 import io.github.torvehammok.cli.TopicsSpecProps
 import io.github.torvehammok.domain.sandbox.SandboxProps
 import io.github.torvehammok.domain.schema.RegistryClient
 import io.github.torvehammok.domain.schema.SchemaDeps
 import io.github.torvehammok.domain.schema.SchemaService
+import io.github.torvehammok.domain.schema.SchemasDiscoveryStrategy
+import io.github.torvehammok.domain.schema.avro.AvroSchemasDiscoveryStrategy
+import io.github.torvehammok.domain.schema.proto.ProtoSchemasDiscoveryStrategy
 import io.github.torvehammok.domain.topic.AdminClientsPool
 import io.github.torvehammok.domain.topic.TopicOps
 import io.github.torvehammok.domain.topic.TopicService
 import io.github.torvehammok.infra.confluent.ConfluentSchemaRegistryClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
-val log: Logger = LoggerFactory.getLogger(DefaultCtx::class.java)
+private val log: Logger = LoggerFactory.getLogger(DefaultCtx::class.java)
 
 class DefaultCtx(val configmap: Configmap) : Ctx {
 
@@ -48,6 +57,11 @@ class DefaultCtx(val configmap: Configmap) : Ctx {
         topicsSpecProps = configmap.get("topicSpecs", TopicsSpecProps::class.java)
         sandboxProps = configmap.get("sandbox", SandboxProps::class.java)
 
+        val schemasDir = Paths.get(schemasSpecProps.dir)
+        if (!Files.exists(schemasDir)) {
+            throw IllegalStateException("Schemas directory does not exist: ${schemasSpecProps.dir}")
+        }
+
 
         registryClient = ConfluentSchemaRegistryClient(
             schemasSpecProps,
@@ -66,7 +80,14 @@ class DefaultCtx(val configmap: Configmap) : Ctx {
         topicOps = TopicOps(topicsSpecProps, adminClientsPool, sandboxProps)
         topicService = TopicService(topicOps)
 
-        val schemaDeps = SchemaDeps(sandboxProps, schemasSpecProps)
+        val schemasDiscoveryStrategy = createSchemasDiscoveryStrategy(
+            schemasDir = schemasDir,
+            format = schemasSpecProps.format,
+            sandboxProps = sandboxProps
+        )
+
+        val schemaDeps = SchemaDeps(schemasDiscoveryStrategy)
+
         schemaService = SchemaService(registryClient, schemasSpecProps, schemaDeps)
 
         instances[TopicService::class.java] = topicService
@@ -98,5 +119,16 @@ class DefaultCtx(val configmap: Configmap) : Ctx {
                 }
             }
         }
+    }
+}
+
+private fun createSchemasDiscoveryStrategy(
+    schemasDir: Path,
+    format: SchemasSpecFormat,
+    sandboxProps: SandboxProps
+): SchemasDiscoveryStrategy {
+    return when (format) {
+        AVRO -> AvroSchemasDiscoveryStrategy(sandboxProps, schemasDir)
+        PROTOBUF -> ProtoSchemasDiscoveryStrategy(sandboxProps, schemasDir)
     }
 }

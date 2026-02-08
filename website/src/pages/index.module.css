@@ -1,0 +1,67 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  /* Soft magical gradient background */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+[data-theme='dark'] .heroBanner {
+   /* Dark mode variant: Deep space/magic purple */
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.logoContainer {
+  margin-bottom: 1.5rem;
+}
+
+.heroLogo {
+  width: 200px;
+  height: 200px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.heroDescription {
+  max-width: 600px;
+  margin: 1.5rem auto;
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.magicText {
+  background: linear-gradient(90deg, #FFB74D, #FB8C00, #7B1FA2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+  .heroLogo {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem; /* Space between buttons */
+  margin-top: 2rem;
+}
