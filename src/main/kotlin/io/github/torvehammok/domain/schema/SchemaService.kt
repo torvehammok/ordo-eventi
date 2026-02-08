@@ -57,7 +57,7 @@ class SchemaService(
             matcher = inclusionGlobMatcher
         )
 
-        log.info("Schema updates plan:\n{}", SchemaUpdatePlanPrinter().print(plan))
+        log.info("Schema updates plan:\n\n{}", SchemaUpdatePlanPrinter().print(plan))
         return plan
     }
 
@@ -86,7 +86,7 @@ class SchemaService(
             matcher = inclusionGlobMatcher
         )
 
-        log.info("Schema updates plan:\n{}", SchemaUpdatePlanPrinter().print(plan))
+        log.info("Schema updates plan:\n\n{}", SchemaUpdatePlanPrinter().print(plan))
 
         log.info("Applying schema updates...")
         applySchemaUpdatesPlan(plan, currentSchemas)

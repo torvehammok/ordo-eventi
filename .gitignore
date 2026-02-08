@@ -6,6 +6,9 @@ build/
 .kotlin
 .env
 
+nanobanana-output
+nanobanana-output-old
+
 ### IntelliJ IDEA ###
 .idea/
 *.iws

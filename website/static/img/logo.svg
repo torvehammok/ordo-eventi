@@ -1,0 +1,61 @@
+<svg width="220" height="200" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bearGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFB74D"/> <!-- Medium Orange -->
+      <stop offset="100%" stop-color="#F57C00"/> <!-- Darker Orange -->
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Bear Body (Squarish) -->
+  <rect x="40" y="80" width="120" height="110" rx="20" ry="20" fill="url(#bearGrad)" />
+
+  <!-- Bear Head (Squarish) -->
+  <rect x="30" y="40" width="140" height="110" rx="25" ry="25" fill="url(#bearGrad)" />
+  
+  <!-- Ears -->
+  <circle cx="35" cy="45" r="15" fill="#F57C00" />
+  <circle cx="165" cy="45" r="15" fill="#F57C00" />
+
+  <!-- Inner Ear -->
+  <circle cx="35" cy="45" r="8" fill="#FFE0B2" />
+  <circle cx="165" cy="45" r="8" fill="#FFE0B2" />
+
+  <!-- Face Details -->
+  <circle cx="70" cy="85" r="6" fill="#3E2723" /> <!-- Left Eye (Dark Brown) -->
+  <circle cx="130" cy="85" r="6" fill="#3E2723" /> <!-- Right Eye -->
+  
+  <!-- Snout Area -->
+  <rect x="80" y="95" width="40" height="30" rx="15" ry="15" fill="#FFE0B2" />
+  <path d="M92,102 Q100,110 108,102" fill="none" stroke="#3E2723" stroke-width="3" stroke-linecap="round" />
+  <ellipse cx="100" cy="100" rx="8" ry="5" fill="#3E2723" />
+
+  <!-- Wizard Hat -->
+  <!-- Brim: Wider and curved -->
+  <path d="M15,45 Q100,60 185,45 L185,35 Q100,50 15,35 Z" fill="#5C6BC0" /> <!-- Lighter Indigo -->
+  
+  <!-- Cone: Bent tip for wizard feel -->
+  <path d="M45,36 Q80,-10 130,5 L145,36 Z" fill="#7986CB" /> <!-- Periwinkle/Soft Blue -->
+  
+  <!-- Star/Buckle on hat -->
+  <circle cx="100" cy="30" r="5" fill="#FFD700" opacity="0.8" />
+
+  <!-- Wand Hand -->
+  <circle cx="160" cy="130" r="15" fill="#FFB74D" />
+  
+  <!-- Wand -->
+  <line x1="160" y1="130" x2="190" y2="80" stroke="#8D6E63" stroke-width="6" stroke-linecap="round" />
+  
+  <!-- Magic Star (Bigger & Glowy) -->
+  <path d="M190 60 L195 75 L210 80 L195 85 L190 100 L185 85 L170 80 L185 75 Z" fill="#FFEB3B" filter="url(#glow)">
+      <!-- Centered around 190, 80 -->
+      <animateTransform attributeName="transform" type="rotate" from="0 190 80" to="360 190 80" dur="5s" repeatCount="indefinite"/>
+  </path>
+
+</svg>

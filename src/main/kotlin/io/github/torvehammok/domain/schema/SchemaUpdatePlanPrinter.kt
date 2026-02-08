@@ -12,9 +12,14 @@ class SchemaUpdatePlanPrinter {
             .forEach {
                 builder.append("  # Schema '${it.schema.subject}' is in sync\n")
             }
-        builder.append('\n')
 
-        for (schema in plan.changes()) {
+        val changes = plan.changes()
+
+        if (changes.isNotEmpty()) {
+            builder.append('\n')
+        }
+
+        for (schema in changes) {
             val op = plan.ops.find { it.schema.subject == schema.subject }
 
             if (op == null || op.state == DiffNode.State.UNTOUCHED) {

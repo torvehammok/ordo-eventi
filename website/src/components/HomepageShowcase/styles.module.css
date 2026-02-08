@@ -1,0 +1,9 @@
+.showcaseSection {
+  padding: 4rem 0;
+  background-color: var(--ifm-color-secondary-bg); /* Use Docusaurus theme variable for subtle background difference */
+}
+
+/* Adjust code block max height if needed */
+.showcaseSection pre {
+  max-height: 400px;
+}

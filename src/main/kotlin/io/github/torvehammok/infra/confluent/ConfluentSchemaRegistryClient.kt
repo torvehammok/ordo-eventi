@@ -62,7 +62,7 @@ class ConfluentSchemaRegistryClient(
     }
 
     override fun deleteSchema(subject: String) {
-        client.deleteSubject(subject, false)
+        client.deleteSubject(subject, true)
     }
 
     override fun normalizeSchemaDef(schema: SchemaDef, refs: List<SchemaDef>): String {
@@ -83,12 +83,12 @@ class ConfluentSchemaRegistryClient(
         val allSubjects = if (sandboxProps.enabled) {
             client.getAllSubjectsByPrefix(sandboxProps.prefix)
         } else {
-            client.getAllSubjects(false)
+            client.getAllSubjects(true)
         }
 
         val schemas = mutableListOf<RegistrySchema>()
         for (subject in allSubjects) {
-            val latestSchemaMetadata = client.getLatestSchemaMetadata(subject)
+            val latestSchemaMetadata = client.getLatestWithMetadata(subject, emptyMap(), true)
 
             val registrySchema = RegistrySchema(
                 subject = latestSchemaMetadata.subject,

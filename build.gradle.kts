@@ -167,7 +167,7 @@ tasks.register("generateTestAvroJava") {
     group = "build"
     description = "Generate Java classes from Avro schemas in avro/common using SpecificCompilerTool"
 
-    val avroSchemasDir = "avro/common"
+    val avroSchemasDir = "src/test/avro/common"
     val avroCodeGenerationDir = "build/generated/sources/avro/test/java"
 
     // Define the task inputs and outputs for the Gradle up-to-date checks
@@ -193,10 +193,10 @@ tasks.register("generateTestAvroJava") {
                 "private",
                 "-noSetters",
                 "schema",
-                "avro/common/AddressAvro.avsc",
-                "avro/common/MoneyAvro.avsc",
-                "avro/common/DateRangeAvro.avsc",
-                "avro/common/BookingAmountsAvro.avsc",
+                "$avroSchemasDir/AddressAvro.avsc",
+                "$avroSchemasDir/MoneyAvro.avsc",
+                "$avroSchemasDir/DateRangeAvro.avsc",
+                "$avroSchemasDir/BookingAmountsAvro.avsc",
                 file(avroCodeGenerationDir).absolutePath
             )
         )
